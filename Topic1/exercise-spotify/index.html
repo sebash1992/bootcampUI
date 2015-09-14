@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Topic 0</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<meta content="Sebastian Herrera" name="author"/>
+	<meta content="Topic 1 Bootcamp UI" name="description" />
+	<meta content="Jquery and JS" name="keywords" />
+	<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+	 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+	 <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<link href="css/style.css" rel="stylesheet">
+	<script type="text/javascript">
+	$(window).ready(function(){
+		
+	});
+
+
+
+function getResponse(){
+
+	var name = $("#artistName").val();
+	//var name = "beatles";
+	$.ajax({
+    url : 'https://api.spotify.com/v1/search',
+    data : { 'q':name,'type':"album" },
+    type : 'GET',  dataType : 'json',
+ 	success : function(json) {
+ 		
+
+ 		 var sec=$("<section/>").attr("id","mytable");
+ 		 $("#div1").empty();
+    	 $("#div1").append(sec);
+    	 var artisAlbums=json.albums.items;
+
+ 		 console.log(artisAlbums);
+	    for(var i=0;i<artisAlbums.length;i++)
+	    {
+	        var tr="<article>"
+	        var td1="<header><h1>"+artisAlbums[i].name+"</h1>";
+	        var td2='<p id="text">'+artisAlbums[i].type+"</p></header>";
+	        var td3='<div><img src="' + artisAlbums[i].images[0].url+ ' " />'+"</div>";
+	        var td4="<div><p>"+'<a href="' + artisAlbums[i].external_urls.spotify + '">Lisen in Spotify </a></div></article>'
+	        
+
+			
+	       $("#mytable").append(tr+td1+td2+td3+td4); 
+
+	    }   
+    },
+    error : function(xhr, status) {
+        $("#hereTheResponse").css("color","red");
+    },
+    complete : function(xhr, status) {
+        
+    }
+	});
+}
+	
+		
+</script>
+</head>
+ 
+
+
+
+
+<body>
+<div>
+<input type="text" id="artistName">
+<button type="button" onclick="getResponse()">Search Artist</button>
+
+</div>
+<div id="div1"> </div>
+
+
+
+
+</body>
+</html>
+

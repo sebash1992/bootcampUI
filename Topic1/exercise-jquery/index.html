@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <title>Topic 0</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <meta content="Sebastian Herrera" name="author"/>
+        <meta content="Topic 1 Bootcamp UI" name="description" />
+        <meta content="Jquery and JS" name="keywords" />
+
+         <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+            <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <link href="css/style.css" rel="stylesheet">
+
+    <script type="text/javascript">
+        $(window).ready(function(){
+            $("#hiddenSec").fadeIn(function(){
+                    $(".alias").focus();
+            });
+        });
+
+
+
+        function getWelcomeResponse(){
+            var name = "Sebastian";
+            $.ajax({
+            url : 'http://bootcamp.aws.af.cm/welcome/'+ name,
+            type : 'GET',  dataType : 'json',
+            success : function(json) {
+
+                var new_text = json.response;
+                console.log(new_text);
+                new_text = new_text.replace(name, '<span>'+name+'</span>');
+                $('<div class="content"/>')
+                    .html(new_text).appendTo('#hereTheResponse');
+
+                $('span').effect("highlight", {color:"#ff0000"}, 3000);
+
+                },
+            error : function(xhr, status) {
+                $("#hereTheResponse").css("color","red");
+            },
+            complete : function(xhr, status) {
+                
+            }
+            });
+        }
+    
+        
+</script>
+
+
+</head>
+ 
+<body>
+<header> MI titulo</header>
+<div> Hola soy seba</div>
+
+<section id="hereTheResponse"> 
+     <article>
+         <header >      
+            <h1>My article</h1>       
+         </header>
+         <p>the boddy</p> 
+         <footer>author</footer>
+     </article>
+</section>
+<section hidden id="hiddenSec"> 
+     <article>
+         <header >      
+            <h1>My article Nº2</h1>       
+         </header>
+         <p>There is the boddy</p> 
+         <footer>author</footer>
+     </article>
+</section>
+
+<textarea class="alias">
+
+</textarea>
+
+<div>
+
+<button type="button" onclick="getWelcomeResponse()">Click Me!</button>
+</div>
+
+
+
+</body>
+</html>
+
