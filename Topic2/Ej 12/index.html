@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <title>Topic 2</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, user-scalable=no">
+            <meta content="Sebastian Herrera" name="author"/>
+            <meta content="Topic 2 Bootcamp UI" name="description" />
+            <meta content="Jquery and JS" name="keywords" />
+
+            <link href="css/style.css" rel="stylesheet">
+
+            <script src="mixin.js"></script>
+            <script src="movie.js"></script>
+            <script src="movieObserver.js"></script>
+            <script src="actor.js"></script>
+      
+
+
+    </head>
+     
+    <body>
+
+              <script type="text/javascript">
+                var invictus = new Movie();
+                invictus.set('title', 'Titanic');
+                invictus.set('duration', 153);
+                var morganFreeman = new actor("Morgan","Freeman");
+                invictus.addActor(morganFreeman);
+                var matDamon = new actor("Mat","Damon");
+                invictus.addActor(matDamon);               
+                
+                
+                
+                console.log(invictus.getActors());
+                
+             </script>
+    </body>
+</html>

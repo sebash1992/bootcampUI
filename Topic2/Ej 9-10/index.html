@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <title>Topic 2</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, user-scalable=no">
+            <meta content="Sebastian Herrera" name="author"/>
+            <meta content="Topic 2 Bootcamp UI" name="description" />
+            <meta content="Jquery and JS" name="keywords" />
+
+            <link href="css/style.css" rel="stylesheet">
+
+            <script src="mixin.js"></script>
+            <script src="movie.js"></script>
+            <script src="movieObserver.js"></script>
+      
+
+
+    </head>
+     
+    <body>
+
+              <script type="text/javascript">
+                var peli = new DownloadableMovie();
+                peli.set('title', 'Terminator');
+                var ob = new MovieObserver();
+                peli.addObserver(ob);
+                peli.play();
+                peli.stop();
+                peli.download();
+
+                var peli2 = new Movie();
+                peli2.set('title', 'Shrek');
+                var ob = new MovieObserver();
+                peli2.addObserver(ob);
+                peli2.play();
+                peli2.stop();
+                peli2.share("Seba");
+             </script>
+    </body>
+</html>

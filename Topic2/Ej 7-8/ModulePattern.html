@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+            <title>Topic 2</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, user-scalable=no">
+            <meta content="Sebastian Herrera" name="author"/>
+            <meta content="Topic 2 Bootcamp UI" name="description" />
+            <meta content="Jquery and JS" name="keywords" />
+
+             <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+            <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+            <link href="css/style.css" rel="stylesheet">
+
+        <script type="text/javascript">
+
+            function Observer(){
+              this.MovieObserver = [];
+            }
+
+            Observer.prototype = {
+                add : function( obj ){
+                    return this.MovieObserver.push( obj );
+                },
+                count : function(){
+                  return this.MovieObserver.length;
+                },
+                get : function( index ){
+                  if( index > -1 && index < this.MovieObserver.length ){
+                    return this.MovieObserver[ index ];
+                  }
+                },
+                indexOf : function( obj, startIndex ){
+                  var i = startIndex;
+                 
+                  while( i < this.MovieObserver.length ){
+                    if( this.MovieObserver[i] === obj ){
+                      return i;
+                    }
+                    i++;
+                  }
+                 
+                  return -1;
+                },
+                removeAt : function( index ){
+                  this.MovieObserver.splice( index, 1 );
+                },
+
+            }
+             
+
+        function Movie () {
+            this.attributes = {};
+            this.attributes["title"]=" ";
+            this.attributes["duration"]=" ";
+            this.observers = new Observer();
+        };
+
+        Movie.prototype = (function(){
+
+            return{
+                play:function ()  {
+                 var observerCount = this.observers.count();
+                  for(var i=0; i < observerCount; i++){
+                    this.observers.get(i).update( this.attributes["title"] + "is Playing" );
+                  }
+                },
+                stop:function ()  {
+                    var observerCount = this.observers.count();
+                      for(var i=0; i < observerCount; i++){
+                        this.observers.get(i).update( this.attributes["title"] + "is stopped" );
+                    }
+                },
+                set:function (attr,value)  {
+                    var oldValue = this.attributes[attr];
+                    this.attributes[attr]=value;
+                    console.log(attr+" " + oldValue + " renamed by " + this.attributes[attr]);
+                },
+                get:function (attr)  {
+                    return this.attributes[attr];
+                },
+                addObserver : function( observer ){
+                    this.observers.add( observer );
+                },
+                removeObserver : function( observer ){
+                 this.observers.removeAt( this.observers.indexOf( observer, 0 ) );
+                },
+            };
+        })();
+        
+
+         function inheritPrototype(childObject, parentObject) {
+            var copyOfParent = Object.create(parentObject.prototype);
+            copyOfParent.constructor = childObject;
+            childObject.prototype = copyOfParent;
+}
+
+        function DownloadableMovie () {
+            Movie.call(this);
+        }
+
+         DownloadableMovie.prototype = (function(){
+            return{
+             download:function ()  {
+                            console.log("Downloading");
+            },
+        }
+        })();
+
+        inheritPrototype(DownloadableMovie,Movie);
+       
+        DownloadableMovie.prototype.download = function () {
+             console.log('Downloading movie');      
+        };
+
+
+
+         function MovieObserver (){
+         
+         }
+
+        MovieObserver.prototype= {
+            constructor:Observer,
+            update : function( context ){
+                console.log(context);
+            }
+        }
+
+        var peli = new DownloadableMovie();
+        peli.set('title', 'Terminator');
+        var ob = new MovieObserver();
+        peli.addObserver(ob);
+        peli.play();
+        peli.stop();
+        peli.download();
+
+        var peli2 = new Movie();
+        peli2.set('title', 'Shrek');
+        var ob = new MovieObserver();
+        peli2.addObserver(ob);
+        peli2.play();
+        peli2.stop();
+        </script>
+
+
+    </head>
+     
+    <body>
+    </body>
+</html>

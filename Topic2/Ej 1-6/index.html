@@ -14,27 +14,27 @@
 
         <script type="text/javascript">
 
-            function observerList(){
-              this.observerList = [];
+            function Observer(){
+              this.MovieObserver = [];
             }
 
-            observerList.prototype = {
+            Observer.prototype = {
                 add : function( obj ){
-                    return this.observerList.push( obj );
+                    return this.MovieObserver.push( obj );
                 },
                 count : function(){
-                  return this.observerList.length;
+                  return this.MovieObserver.length;
                 },
                 get : function( index ){
-                  if( index > -1 && index < this.observerList.length ){
-                    return this.observerList[ index ];
+                  if( index > -1 && index < this.MovieObserver.length ){
+                    return this.MovieObserver[ index ];
                   }
                 },
                 indexOf : function( obj, startIndex ){
                   var i = startIndex;
                  
-                  while( i < this.observerList.length ){
-                    if( this.observerList[i] === obj ){
+                  while( i < this.MovieObserver.length ){
+                    if( this.MovieObserver[i] === obj ){
                       return i;
                     }
                     i++;
@@ -43,7 +43,7 @@
                   return -1;
                 },
                 removeAt : function( index ){
-                  this.observerList.splice( index, 1 );
+                  this.MovieObserver.splice( index, 1 );
                 },
 
             }
@@ -53,7 +53,7 @@
             this.attributes = {};
             this.attributes["title"]=" ";
             this.attributes["duration"]=" ";
-            this.observers = new observerList();
+            this.observers = new Observer();
         }
 
         Movie.prototype = {
@@ -87,46 +87,13 @@
  
         }
 
-        function MovieObserver (){
-           this.observerList = [];
-        }
         
+
+         function MovieObserver (){
+         
+         }
+
         MovieObserver.prototype= {
-            constructor:MovieObserver,
-            add : function( obj ){
-              return this.observerList.push( obj );
-            },
-            count : function(){
-              return this.observerList.length;
-            },
-            get : function( index ){
-              if( index > -1 && index < this.observerList.length ){
-                return this.observerList[ index ];
-              }
-              },
-            indexOf : function( obj, startIndex ){
-                  var i = startIndex;
-                 
-                  while( i < this.observerList.length ){
-                    if( this.observerList[i] === obj ){
-                      return i;
-                    }
-                    i++;
-                  }
-                 
-                  return -1;
-                
-            },
-            removeAt : function( index ){
-                this.observerList.splice( index, 1 );
-            }
-
-        } 
-
-         function Observer (){
-        }
-
-        Observer.prototype= {
             constructor:Observer,
             update : function( context ){
                 console.log(context);
@@ -135,9 +102,10 @@
 
         var peli = new Movie();
         peli.set('title', 'Terminator');
-        var ob = new Observer();
+        var ob = new MovieObserver();
         peli.addObserver(ob);
         peli.play();
+        peli.stop();
         </script>
 
 
