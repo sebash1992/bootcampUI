@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title></title>
+		<script src="js/handlebars-v4.0.2.js"></script>
+		<script src="js/jquery-1.11.3.js"></script>
+	</head>
+	 <body>
+        <div id="movie">
+            
+        </div>
+         <script id="movies-template" type="text/x-handlebars-movie">
+            {{#each this}}
+                <h1>{{Title}}</h1>
+                    <p>Year: {{Year}}</p>
+                    <p>Rated: {{Rated}}</p>
+                    <p>Released: {{Released}}</p>
+                    <p>Runtime: {{Runtime}}</p>
+			{{/each}}
+
+        </script>
+ 
+ 
+        <script>
+            $(window).ready(function()  {
+            	var jsonarray=[];
+              function getMovieInfo(movie){
+                    $.ajax({
+                    type: 'GET',
+                    "url": "http://www.omdbapi.com/?t=" + movie,
+                    "dataType": "jsonp",
+                    success: function(data) {
+                        //console.log(data);
+                         jsonarray=jsonarray.concat(data);
+                         render();
+                         }
+                });
+
+
+              }         
+
+                function render(){
+                     var sources   = $("#movies-template").html()
+                        var templates = Handlebars.compile(sources);    
+                        var movies = templates(jsonarray);
+                        $("#movie").html(movies);
+                }
+                getMovieInfo("Shrek");
+                getMovieInfo("Shrek 2");                
+                getMovieInfo("wolverine");
+
+                 
+
+           });
+
+
+
+
+        </script>
+    </body>
+</html>
+</html>

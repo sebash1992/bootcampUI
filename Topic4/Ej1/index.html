@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title></title>
+		<script src="js/handlebars-v4.0.2.js"></script>
+		<script src="js/jquery-1.11.3.js"></script>
+	</head>
+	 <body>
+        <div id="movie">
+            
+        </div>
+        <script id="movie-template" type="text/x-handlebars-movie">
+            
+                <h1>{{Title}}</h1>
+                    <p>Year: {{Year}}</p>
+                    <p>Rated: {{Rated}}</p>
+                    <p>Released: {{Released}}</p>
+                    <p>Runtime: {{Runtime}}</p>
+        </script>
+ 
+ 
+        <script>
+            $(document).ready(function()  {
+                $.ajax({
+                    type: 'GET',
+                    "url": "http://www.omdbapi.com/?t=star trek",
+                    "dataType": "jsonp",
+                    success: function(data) {
+                        console.log(data);
+                         var source   = $("#movie-template").html();
+            	        var template = Handlebars.compile(source);    
+                        var movie = template(data);
+                        $("#movie").html(movie);
+                   }
+                });
+           });
+
+
+        </script>
+    </body>
+</html>
+</html>
