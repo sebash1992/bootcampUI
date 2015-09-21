@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title></title>
+    <script src="js/jquery-1.11.3.js"></script> 
+    <script src="js/underscore.js"></script>     
+    <script src="js/backbone.js"></script>   
+    <script src="js/backbone-localStorage.js"></script>    
+    <script src="js/handlebars-v4.0.2.js"></script>
+    <script src="js/Movie.js"></script>      
+    
+	</head>
+	 <body>
+
+    <div>
+      <input type="text" id="textoPeli">
+      <button type="button" id="btnAgregar">Add</button>
+    </div>
+
+    <div id="movieView"> </div>
+    <script type="text/template" id="template-movie">
+       <h1> Title: <%=title%> </h1>
+       <p> Year: <%=year%> </p>
+       <p> Rated: <%=rated%> </p>
+       <p> Released: <%=released%> </p>
+       <p> Runtime: <%=runtime%> </p>
+      <div>
+        <button type="button" id="btnRemove" value=<%=title%>>Remove</button>
+      </div>
+  
+    </script>
+   
+ 
+ 
+        <script>
+         
+
+        
+
+            $(window).ready(function()  {
+                $( "#btnAgregar" ).click(function() {
+                  getMovieInfo($("#textoPeli").val());
+                });
+
+              
+              function getMovieInfo(movie){
+                    $.ajax({
+                    type: 'GET',
+                    "url": "http://www.omdbapi.com/?t=" + movie,
+                    "dataType": "jsonp",
+                    success: function(data) {
+                        var movie= (new Movie({id:data.Title,title:data.Title,year:data.Year,rated:data.Rated,released:data.Released,runtime:data.Runtime}))
+                         video.add(movie);                         
+                         movie.save();
+
+                         }
+                });
+              }         
+
+                var video = new Video();
+                video.fetch();
+                var videoView = new VideoView({ model: video });
+
+           });
+
+
+
+
+        </script>
+    </body>
+</html>
+</html>
