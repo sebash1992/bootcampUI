@@ -19,18 +19,19 @@
 
     <div id="movieView"> </div>
     <script type="text/template" id="template-movie">
-       <h1> Title: <%=title%> </h1>
+       <h1> <%=title%> </h1>
        <p> Year: <%=year%> </p>
        <p> Rated: <%=rated%> </p>
        <p> Released: <%=released%> </p>
        <p> Runtime: <%=runtime%> </p>
       <div>
-        <button type="button" id="btnRemove" value=<%=title%>>Remove</button>
+        <button type="button" id="btnRemove" value=<%=id%>>Remove</button>
+        <button type="button" id="btnEdit" value=<%=title%>>Edit</button>
       </div>
   
     </script>
-   
- 
+
+     
  
         <script>
          
@@ -49,18 +50,18 @@
                     "url": "http://www.omdbapi.com/?t=" + movie,
                     "dataType": "jsonp",
                     success: function(data) {
-                        var movie= (new Movie({id:data.Title,title:data.Title,year:data.Year,rated:data.Rated,released:data.Released,runtime:data.Runtime}))
+                        console.log(data);
+                        var movie= (new Movie({id:data.imdbID,title:data.Title,year:data.Year,rated:data.Rated,released:data.Released,runtime:data.Runtime}))
                          video.add(movie);                         
                          movie.save();
 
                          }
                 });
               }         
-
+               
                 var video = new Video();
                 video.fetch();
                 var videoView = new VideoView({ model: video });
-
            });
 
 

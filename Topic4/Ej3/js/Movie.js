@@ -32,6 +32,7 @@ var VideoView = Backbone.View.extend({
              events:
             {
               'click #btnRemove':'deleteMovie',
+              'click #btnEdit':'editMovie',
 
             },
             modelUpdated: function() {
@@ -43,12 +44,15 @@ var VideoView = Backbone.View.extend({
               this.template = _.template($('#template-movie').html());
               this.render();
             },
-            deleteMovie: function(ev){
+            editMovie: function(ev){
+                console.log("aca va el edit");
+
+           
+            },
+             deleteMovie: function(ev){
                   var mov = this.model.get($(ev.target).attr("value"));
                   mov.destroy();
                   this.model.remove(mov);
-
-
             },
             render: function() {
              $( "#movieView").empty();
@@ -59,5 +63,6 @@ var VideoView = Backbone.View.extend({
               return this;
             }
         });
+
 
 
