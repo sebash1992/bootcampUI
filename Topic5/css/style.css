@@ -1,0 +1,116 @@
+html{
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.container {
+  	margin: 0 auto;
+  	margin-top: 35px;
+ 	background-color: #41464A;
+ 	color: #fff;
+ 	overflow: hidden;
+ 	border-radius: 4px;
+}
+
+
+.col-1, .col-2, .col-3, .col-4, .col-6 {
+	float: left;
+	margin-bottom: 30px;
+	min-height: 1px;
+	box-sizing: border-box;
+	padding: 5px;
+}
+
+ .col-1 { width: 10%; }
+ .col-2 { width: 16.66%; }
+ .col-3 { width: 25%; }
+ .col-4 { width: 33.33%; }
+ .col-6 { width: 50%; }
+ .col-12 { width: 100%; }
+
+.clearboth{
+	clear:both;
+}
+
+.header{
+	padding: 20px;
+    width: 100%;
+    font-size: 26px;
+    text-transform: uppercase;
+    background-color: #303335;
+    overflow: auto;
+}
+
+.header h1{
+	font-size: 25px;
+	float: left;
+}
+
+.header p{
+	font-size: 10px;
+    float: left;
+    margin-left: 25px;
+    margin-top: 30px;
+}
+
+.container-movies{
+	padding: 10px;
+	overflow: hidden;
+}
+
+.movie{
+	text-align: center;
+	background-color: #303335;
+	min-height: 245px;
+	border-radius: 6px;
+	float: left;
+	width: 100%;
+}
+
+.movie:hover{background-color: #1C1E1F;}
+
+.movie.editing .input-edit{
+	display: block;
+}
+
+.movie.editing .title{
+	display: none;
+}
+
+.movie .input-edit{
+	display: none;
+	margin: 30px 0 0 150px;
+    padding: 4px;
+}
+
+.movie-body{
+	padding: 0px 8px 8px 8px;
+}
+
+#title, #year, #genre, #description{
+	width: 100%;
+}
+
+.add-movie{
+	padding-top: 14px;
+    padding-left: 14px;
+}
+
+.add-movie input{
+	margin-bottom: 6px;
+	border: 0;
+    padding: 3px;
+}
+
+.add-movie button{
+	float:right;
+}
+
+.remove-movie{
+	float: right;
+    margin-top: 2px;
+    margin-right: 2px;
+}
+
+.remove-movie:hover{
+	cursor: pointer;
+}
