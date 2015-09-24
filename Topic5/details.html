@@ -1,3 +1,16 @@
 <div ng-controller="DetailCtrl">  
-  <p>{{ message }}</p>
+ <header class="header">
+					<h1>{{ movie.title }}</h1>
+				</header>
+				<section class="container-movies">
+					<div class="col-4">
+						<div class="movie">
+							<h1 class="title" > {{movie.title}}</h1>
+							<div class="movie-body">
+							<p>Rated: </p>	<h3 class="rate">{{movie.rate}} </h3>
+							<p>duration: </p>	<h4 class="duration"> {{movie.duration}} </h4>
+							</div>
+						</div>
+					</div>		
+				</section>
 </div>

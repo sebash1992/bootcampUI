@@ -5,7 +5,7 @@ html{
 .container {
   	margin: 0 auto;
   	margin-top: 35px;
- 	background-color: #41464A;
+ 	background-color: #FF4500;
  	color: #fff;
  	overflow: hidden;
  	border-radius: 4px;
@@ -59,7 +59,7 @@ html{
 
 .movie{
 	text-align: center;
-	background-color: #303335;
+	background-color: #FFA07A;
 	min-height: 245px;
 	border-radius: 6px;
 	float: left;
@@ -86,7 +86,7 @@ html{
 	padding: 0px 8px 8px 8px;
 }
 
-#title, #year, #genre, #description{
+.title, .rate, .duration{
 	width: 100%;
 }
 
@@ -107,6 +107,12 @@ html{
 
 .remove-movie{
 	float: right;
+    margin-top: 2px;
+    margin-right: 2px;
+}
+
+.details-movie{
+	float: left;
     margin-top: 2px;
     margin-right: 2px;
 }

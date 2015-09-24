@@ -8,7 +8,7 @@ $routeProvider
         templateUrl : 'home.html',
         controller  : 'MoviesCtrl'
     })
-     .when('/details', {
+     .when('/details/:movieId', {
             templateUrl : 'details.html',
             controller  : 'DetailCtrl'
         })
@@ -62,7 +62,14 @@ myApp.controller('MoviesCtrl', ['$scope', function ($scope) {
     };
 });
 
-myApp.controller('DetailCtrl', ['$scope', function ($scope) {
+myApp.controller('DetailCtrl', ['$scope', '$routeParams', function ($scope, $routeParams) {
 
-	 $scope.message = 'Aca van los detalles!';
+    var movies = JSON.parse(localStorage.getItem('movies-ls'));
+    $scope.movie = movies[$routeParams.movieId];
+    console.log(localStorage.getItem('movies-ls'));
 }]);
+
+myApp.run(function($templateCache) {
+     $templateCache.put('home.html');
+     $templateCache.put('details.html');
+});

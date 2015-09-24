@@ -1,4 +1,4 @@
- <div ng-controller="MoviesCtrl">
+ <div class="container" ng-controller="MoviesCtrl">
       <form>
         <input class="add-input" placeholder="Title" type="text" ng-model="formTitleText" ng-model-instant />
         <input class="add-input" placeholder="duration" type="number" ng-model="formDurationText" ng-model-instant />
@@ -20,9 +20,12 @@
                     <h3 class="duration">{{movie.duration}} </h3>
                     <h4 class="rate"> {{movie.rate}} </h4>
                 </div>
+                <div>
+                <button class="remove-movie" ng-click="removeMovie($index)">Remove</button>
+                <a class="details-movie" href="#/details/{{$index}}">Details</a>
+                </div>
               </div>
-              <button class="remove-movie" ng-click="removeMovie($index)">Remove</button>
-              <a href="#details">Details</a>
+              
 
 
           </div>    
