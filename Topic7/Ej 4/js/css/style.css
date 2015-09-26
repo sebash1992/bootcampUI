@@ -1,0 +1,29 @@
+#dragandrophandler
+{
+border:2px dotted #0B85A1;
+width:400px;
+color:#92AAB0;
+text-align:left;vertical-align:middle;
+padding:10px 10px 10 10px;
+margin-bottom:10px;
+font-size:200%;
+}
+
+.col-1, .col-2, .col-3, .col-4, .col-6 {
+	float: left;
+	margin-bottom: 30px;
+	min-height: 1px;
+	box-sizing: border-box;
+	padding: 5px;
+}
+
+ .col-1 { width: 10%; }
+ .col-2 { width: 16.66%; }
+ .col-3 { width: 25%; }
+ .col-4 { width: 33.33%; }
+ .col-6 { width: 50%; }
+ .col-12 { width: 100%; }
+
+.clearboth{
+	clear:both;
+}
