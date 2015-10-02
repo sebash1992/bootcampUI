@@ -1,4 +1,4 @@
-var finalApp = angular.module('finalApp', ['ngRoute']);
+var finalApp = angular.module('finalApp', ['ngRoute','ngMessages']);
 
 finalApp.config(function($routeProvider) {
 	$routeProvider
@@ -28,26 +28,44 @@ finalApp.controller('TimelineCtrl', function($scope, $http) {
 
 		
 		$scope.saved = localStorage.getItem('blockUsers');
-		$scope.blocks = (localStorage.getItem('blockUsers')!==null) ? JSON.parse($scope.saved) : [];
+		$scope.blocks = (localStorage.getItem('blockUsers')!==null) ? JSON.parse($scope.saved) : [{name:"sebastian"},{name:"pedro"},{name:"joaquin"}];
 		localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
 
 		    $http.get('http://localhost:3000/timeline?count=10')
 		    .success(function(response) {
-		    	$scope.twits=response;
+		    	$scope.twitsWithBlocs=response;
+		    	console.log($scope.twitsWithBlocs);
+		    	$scope.twits=[];
+		    	for(var i = 0; i < $scope.twitsWithBlocs.length; i++) {
+		    		if(!isBlock($scope.twitsWithBlocs[i].user.screen_name)){
+		    			$scope.twits.push($scope.twitsWithBlocs[i]);
+		    		}
+		    	}
 		    	localStorage.setItem('twits-ls', JSON.stringify($scope.twits));
 
 		    });
-		 $scope.BlockUser = function(twitId) {
-			var user = $scope.twits[twitId].user;
-			console.log(user);
-			$scope.blocks.push({user});
+
+		    function isBlock(userId){
+		    	var userName = "@"+userId;
+		    	for(var i = 0; i < $scope.blocks.length; i++) {
+          
+	                if($scope.blocks[i].name==userName){
+	                	return true;
+	                }
+            	}
+        
+		    }
+		$scope.BlockUser = function(twitId) {
+			var user = $scope.twits[twitId].user.screen_name;
+			var userName = '@'+user;
+			$scope.blocks.push({name:userName});
 			localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
 				    	
-		    };
+		};
 });
 finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams', function ($scope, $http, $routeParams) {
 		$scope.saved = localStorage.getItem('blockUsers');
-		$scope.blocks = (localStorage.getItem('blockUsers')!==null) ? JSON.parse($scope.saved) : [];
+		$scope.blocks = (localStorage.getItem('blockUsers')!==null) ? JSON.parse($scope.saved) : [{name:"sebastian"},{name:"pedro"},{name:"joaquin"}];
 		localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
 
 		var str = $routeParams.trend;
@@ -55,15 +73,35 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams', funct
 
 		$http.get('http://localhost:3000/search?q='+res)
 		    .success(function(response) {
-		    	$scope.twits=response.statuses;
+		    	$scope.twitsWithBlocs=response.statuses;
+		    	console.log($scope.twitsWithBlocs);
+		    	$scope.twits=[];
+		    	for(var i = 0; i < $scope.twitsWithBlocs.length; i++) {
+		    		if(!isBlock($scope.twitsWithBlocs[i].user.screen_name)){
+		    			$scope.twits.push($scope.twitsWithBlocs[i]);
+		    		}
+		    	}
+		    	localStorage.setItem('twits-ls', JSON.stringify($scope.twits));
+
 		    });
 		$scope.BlockUser = function(twitId) {
-			var user = $scope.twits[twitId].user;
-			console.log(user);
-			$scope.blocks.push({user});
+			var user = $scope.twits[twitId].user.screen_name;
+			var userName = '@'+user;
+			$scope.blocks.push({name:userName});
 			localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
 				    	
 		};
+
+		function isBlock(userId){
+		    	var userName = "@"+userId;
+		    	for(var i = 0; i < $scope.blocks.length; i++) {
+          
+	                if($scope.blocks[i].name==userName){
+	                	return true;
+	                }
+            	}
+        
+		    }
 }]);
 
 finalApp.controller('TwitDetailsCtrl', ['$scope', '$routeParams', function ($scope, $routeParams) {
@@ -80,6 +118,12 @@ finalApp.controller('BlockUsersCtrl', function($scope, $http) {
 			$scope.blocks.splice(userId,1);
         	localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
 		}
+
+		 $scope.BlockUser = function (user) {
+		  	$scope.blocks.push({name:user.name});
+		  	localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
+		  	user.name="";
+  };
 });
 
 finalApp.controller('TrendTopicCtrl', function($scope, $http) {
@@ -87,4 +131,25 @@ finalApp.controller('TrendTopicCtrl', function($scope, $http) {
 		    .success(function(response) {
 		    	$scope.trends=response[0].trends;
 		    });
+});
+
+finalApp.directive('twitterValidate', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+            ctrl.$parsers.unshift(function(viewValue) {
+
+                scope.pwdValidLength = (viewValue && viewValue[0] == '@' ? 'valid' : undefined);
+
+                if(scope.pwdValidLength) {
+                    ctrl.$setValidity('pwd', true);
+                    return viewValue;
+                } else {
+                    ctrl.$setValidity('pwd', false);                    
+                    return undefined;
+                }
+
+            });
+        }
+    };
 });
