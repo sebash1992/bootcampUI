@@ -1,0 +1,11 @@
+<div class="container" >
+	<div ng-repeat="tw in twits">
+		<div>			
+    		{{ tw.user.name }}
+		</div>
+		<div>		
+    		<a class="details-movie" href="#/twitDetails/{{$index}}"> {{ tw.text }}</a>
+		</div>
+		<button ng-click="BlockUser($index)">Block</button>
+	</div>
+</div>
