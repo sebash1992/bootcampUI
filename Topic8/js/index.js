@@ -24,7 +24,7 @@ finalApp.config(function($routeProvider) {
 	    })
 });
 
-finalApp.controller('TimelineCtrl', function($scope, $http) {
+finalApp.controller('TimelineCtrl', function($scope, $http,$location) {
 
 		
 		$scope.saved = localStorage.getItem('blockUsers');
@@ -34,7 +34,6 @@ finalApp.controller('TimelineCtrl', function($scope, $http) {
 		    $http.get('http://localhost:3000/timeline?count=10')
 		    .success(function(response) {
 		    	$scope.twitsWithBlocs=response;
-		    	console.log($scope.twitsWithBlocs);
 		    	$scope.twits=[];
 		    	for(var i = 0; i < $scope.twitsWithBlocs.length; i++) {
 		    		if(!isBlock($scope.twitsWithBlocs[i].user.screen_name)){
@@ -44,6 +43,10 @@ finalApp.controller('TimelineCtrl', function($scope, $http) {
 		    	localStorage.setItem('twits-ls', JSON.stringify($scope.twits));
 
 		    });
+		    $scope.go = function ( index,path ) {
+		    	var path2=path + '/'+index
+			  $location.path( path2 );
+			};
 
 		    function isBlock(userId){
 		    	var userName = "@"+userId;
@@ -53,6 +56,7 @@ finalApp.controller('TimelineCtrl', function($scope, $http) {
 	                	return true;
 	                }
             	}
+            	return false;
         
 		    }
 		$scope.BlockUser = function(twitId) {
@@ -63,7 +67,7 @@ finalApp.controller('TimelineCtrl', function($scope, $http) {
 				    	
 		};
 });
-finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams', function ($scope, $http, $routeParams) {
+finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$location', function ($scope, $http, $routeParams,$location) {
 		$scope.saved = localStorage.getItem('blockUsers');
 		$scope.blocks = (localStorage.getItem('blockUsers')!==null) ? JSON.parse($scope.saved) : [{name:"sebastian"},{name:"pedro"},{name:"joaquin"}];
 		localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
@@ -74,7 +78,6 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams', funct
 		$http.get('http://localhost:3000/search?q='+res)
 		    .success(function(response) {
 		    	$scope.twitsWithBlocs=response.statuses;
-		    	console.log($scope.twitsWithBlocs);
 		    	$scope.twits=[];
 		    	for(var i = 0; i < $scope.twitsWithBlocs.length; i++) {
 		    		if(!isBlock($scope.twitsWithBlocs[i].user.screen_name)){
@@ -100,8 +103,13 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams', funct
 	                	return true;
 	                }
             	}
+            	return false;
         
 		    }
+		 $scope.go = function ( index,path ) {
+		    	var path2=path + '/'+index
+			  $location.path( path2 );
+			};
 }]);
 
 finalApp.controller('TwitDetailsCtrl', ['$scope', '$routeParams', function ($scope, $routeParams) {
@@ -120,10 +128,27 @@ finalApp.controller('BlockUsersCtrl', function($scope, $http) {
 		}
 
 		 $scope.BlockUser = function (user) {
-		  	$scope.blocks.push({name:user.name});
-		  	localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
-		  	user.name="";
+		 	if(!isBlock(user)){		 		
+		  		$scope.blocks.push({name:user.name});
+		  		localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
+		  		user.name="";
+		 	}else{
+		 		alert("el usuario existe");
+		 	}
+		  	
   };
+
+  		function isBlock(userId){
+		    	var userName =userId.name;
+		    	for(var i = 0; i < $scope.blocks.length; i++) {          
+	                if($scope.blocks[i].name==userName){
+	                	return true;
+	                }
+            	}
+            	return false;        
+		    }
+
+
 });
 
 finalApp.controller('TrendTopicCtrl', function($scope, $http) {

@@ -1,12 +1,26 @@
 <div class="container" >
-	<div ng-repeat="tw in twits ">
-		<div>			
-    		{{ tw.user.name }}
+	<div ng-repeat="tw in twits " ng-click="go($index,'/twitDetails')">
+		<div class="context">
+
 		</div>
-		<div>		
-    		<a class="details-movie" href="#/twitDetails/{{$index}}"> {{ tw.text }}</a>
-    		<button class="block-user" ng-click="BlockUser($index)">X</button>
-		</div>
-	
+		<div class="twitContent" >
+			<div class="twitHeader">
+				<a>
+					<img class="profilePicture col-1" src="{{ tw.user.profile_image_url}}">
+					<strong class="fullName">{{ tw.user.name }}</strong>
+					<span>‏&rlm;</span>
+					<span class="userName">
+						<s>@</s>
+						<b>{{ tw.user.screen_name }}</b>
+						<button class="block-user" ng-click="BlockUser($index)">X</button>
+					</span>
+				</a>
+			</div>
+			<p class="textSize">
+				
+    			<a class="details-movie" > {{ tw.text }}</a>
+			</p>
+
+		</div>	
 	</div>
 </div>

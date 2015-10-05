@@ -1,15 +1,13 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background: #fff;
+    color: #292f33;
+    font-size: 14px;
+ 	 font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
-}
 
 .col-1, .col-2, .col-3, .col-4, .col-6 {
 	float: left;
-	margin-bottom: 30px;
 	min-height: 1px;
 	box-sizing: border-box;
 	padding: 5px;
@@ -24,4 +22,47 @@ a {
 
 .clearboth{
 	clear:both;
+}
+.content {
+}
+.menu{
+ 	width:100%;
+}
+.profilePicture {
+    width: 48px;
+    height: 48px;
+    border-radius: 5px;
+}
+.fullName {
+    font-weight: bold;
+    color: #292f33;
+}
+.userName {
+    direction: ltr;
+    unicode-bidi: embed;
+    font-size: 13px;
+    color: #8899a6;
+}
+
+.textSize {
+	margin:2px;
+    padding-left: 5px;
+}
+.context {
+}
+.twitContent{
+	margin:10px;
+}
+
+.twitContent{
+    position: relative;
+    min-height: 51px;
+    padding: 9px 12px;
+    border-bottom: 2px solid #e1e8ed;
+}
+.twitsContent{
+    position: relative;
+    min-height: 51px;
+    padding: 9px 12px;
+    border-bottom: 2px solid #e1e8ed;
 }
