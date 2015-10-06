@@ -1,12 +1,15 @@
 <div class="container" >
 
-	<form  name="myForm" novalidate ng-submit="BlockUser(user)">
-	    <input ng-model="user.name"  twitter-validate required type="text" id="userName" block-names="blocks" placeholder="@userName">	    
-	    <button ng-disabled="myForm.$invalid">Block User</button>
+	<form  name="myForm" class="formUser" novalidate ng-submit="BlockUser(user)">
+	    <input ng-model="user.name" class="inputBlockUser "  twitter-validate required type="text" id="userName" block-names="blocks" placeholder="@userName">	    
+	    <button ng-disabled="myForm.$invalid"><i class="fa fa-twitter fa-2x"></i><i class="fa fa-plus fa-1x"></i></button>
 	</form>
 
-	<div ng-repeat="tw in blocks track by $index">
-			{{tw.name}}
-			 <button class="remove-movie" ng-click="NoBlockUser($index)">X</button>
+	<div class="blockedUser" ng-repeat="tw in blocks track by $index">
+			 <span>
+			 	<b>{{tw.name}}</b>
+			 	<i class="fa fa-trash-o fa-2x" ng-click="NoBlockUser($index)"></i>
+			 </span>
+
 	</div>
 </div>

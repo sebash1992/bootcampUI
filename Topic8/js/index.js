@@ -24,13 +24,9 @@ finalApp.config(function($routeProvider) {
 	    })
 });
 
-finalApp.controller('TimelineCtrl', function($scope, $http,$location) {
+finalApp.controller('TimelineCtrl', function($scope, $http,$location,addBlockedUser) {
 
-		
-		$scope.saved = localStorage.getItem('blockUsers');
-		$scope.blocks = (localStorage.getItem('blockUsers')!==null) ? JSON.parse($scope.saved) : [{name:"sebastian"},{name:"pedro"},{name:"joaquin"}];
-		localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
-
+		$scope.blocks=addBlockedUser;
 		    $http.get('http://localhost:3000/timeline?count=10')
 		    .success(function(response) {
 		    	$scope.twitsWithBlocs=response;
@@ -62,16 +58,12 @@ finalApp.controller('TimelineCtrl', function($scope, $http,$location) {
 		$scope.BlockUser = function(twitId) {
 			var user = $scope.twits[twitId].user.screen_name;
 			var userName = '@'+user;
-			$scope.blocks.push({name:userName});
-			localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
+			addBlockedUser.addUser(userName);
 				    	
 		};
 });
-finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$location', function ($scope, $http, $routeParams,$location) {
-		$scope.saved = localStorage.getItem('blockUsers');
-		$scope.blocks = (localStorage.getItem('blockUsers')!==null) ? JSON.parse($scope.saved) : [{name:"sebastian"},{name:"pedro"},{name:"joaquin"}];
-		localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
-
+finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$location','addBlockedUser', function ($scope, $http, $routeParams,$location,addBlockedUser) {
+		$scope.blocks=localStorage.getItem('blockUsers');
 		var str = $routeParams.trend;
 		var res = str.replace("#", "%23");
 
@@ -90,8 +82,7 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$loca
 		$scope.BlockUser = function(twitId) {
 			var user = $scope.twits[twitId].user.screen_name;
 			var userName = '@'+user;
-			$scope.blocks.push({name:userName});
-			localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
+			addBlockedUser.addUser(userName);
 				    	
 		};
 
@@ -112,15 +103,21 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$loca
 			};
 }]);
 
-finalApp.controller('TwitDetailsCtrl', ['$scope', '$routeParams', function ($scope, $routeParams) {
+finalApp.controller('TwitDetailsCtrl', ['$scope', '$routeParams','addBlockedUser', function ($scope, $routeParams,addBlockedUser) {
+
 		var twits = JSON.parse(localStorage.getItem('twits-ls'));
     	$scope.twit = twits[$routeParams.tiwtId];
+
+    	$scope.BlockUser = function(user) {
+			var userName = '@'+user;			
+			addBlockedUser.addUser(userName);
+				    	
+		};
 }]);
 
-finalApp.controller('BlockUsersCtrl', function($scope, $http) {
-		$scope.saved = localStorage.getItem('blockUsers');
-		$scope.blocks = (localStorage.getItem('blockUsers')!==null) ? JSON.parse($scope.saved) : [];
-		localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
+finalApp.controller('BlockUsersCtrl', function($scope, $http , addBlockedUser) {
+
+		$scope.blocks=addBlockedUser;
 
 		$scope.NoBlockUser = function(userId) {
 			$scope.blocks.splice(userId,1);
@@ -128,10 +125,8 @@ finalApp.controller('BlockUsersCtrl', function($scope, $http) {
 		}
 
 		 $scope.BlockUser = function (user) {
-		 	if(!isBlock(user)){		 		
-		  		$scope.blocks.push({name:user.name});
-		  		localStorage.setItem('blockUsers', JSON.stringify($scope.blocks));
-		  		user.name="";
+		 	if(!isBlock(user)){	
+				addBlockedUser.addUser(user);
 		 	}else{
 		 		alert("el usuario existe");
 		 	}
@@ -151,11 +146,17 @@ finalApp.controller('BlockUsersCtrl', function($scope, $http) {
 
 });
 
-finalApp.controller('TrendTopicCtrl', function($scope, $http) {
+finalApp.controller('TrendTopicCtrl', function($scope, $http, $location) {
 		   $http.get('http://localhost:3000/trends?id=23424747')
 		    .success(function(response) {
 		    	$scope.trends=response[0].trends;
 		    });
+
+		     $scope.go = function ( index,path ) {
+		     	console.log(index);
+		    	var path2=path + '/'+index
+			  $location.path( path2 );
+			};
 });
 
 finalApp.directive('twitterValidate', function() {
@@ -177,4 +178,26 @@ finalApp.directive('twitterValidate', function() {
             });
         }
     };
+});
+
+finalApp.factory("addBlockedUser", function() {
+
+  	var userList;
+
+	if(localStorage.getItem('blockUsers')!==null){
+		userList = JSON.parse(localStorage.getItem('blockUsers'))
+	}
+	else{
+		userList = [];
+		localStorage.setItem('blockUsers', JSON.stringify(userList));
+	}
+
+	userList.addUser = function(screen_name){
+		userList.push({
+			name: screen_name,
+		});
+		localStorage.setItem('blockUsers', JSON.stringify(userList));
+	};
+
+	return userList;
 });

@@ -16,24 +16,21 @@
 		<script src="js/index.js"></script>					
 
 	  	<link href="css/style.css" rel="stylesheet" type="text/css"/>
+	  	<link href="css/font-awesome-4.4.0/css/font-awesome.min.css" rel="stylesheet">
 
 	</head>
 	 
 	<body>
 	<div ng-app="finalApp">
-		<header>
-			Home
+		<header >
+			<h1><i class="fa fa-twitter fa-lg"></i><span class="header">Home</span></h1>
+			<nav class="menu">
+				<a href="#/"><i class="fa fa-home fa-lg"></i>Home</a>
+				<a href="#/block"><i class="fa fa-ban fa-lg"></i>Blocked Users</a>
+				<a href="#/TT"><i class="fa fa-slack fa-lg"></i>Trends</a>
+			</nav>
 		</header>
-		<div class="menu">
-			<div>
-					<a href="#/block">Block User</a>
-					<a href="#/">Home</a>
-					<a href="#/TT">Trending Topic</a>
-			</div>
-			<div class="clearboth">
-
-			</div>
-		</div>
+	
 
 
            <div ng-view></div> 

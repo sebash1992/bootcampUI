@@ -1,8 +1,59 @@
 <div class="container" >
-		<div>			
-    		{{ twit.user.name }}
-		</div>
-		<div>		
-    		{{ twit.text }}
-		</div>
+	<div class="twitDetail" >
+			<div class="twitHeader">
+				<a>
+					<img class="profilePicture col-1" src="{{ twit.user.profile_image_url}}">
+					<div class="user">
+						<div class="fullName">
+							<strong >{{ twit.user.name }}</strong>
+							
+							<button ng-click="BlockUser(twit.user.screen_name) "><i class="fa fa-twitter fa-2x"></i><i class="fa fa-plus fa-1x"></i></button>
+						</div>
+						<div class="userName">
+							<s>@</s>
+							<b>{{ twit.user.screen_name }}</b>
+
+						</div>
+						
+							
+
+					</div>
+				</a>
+			</div>
+			<div class="whiteDiv">
+			</div>
+			<div class="textSize">
+				
+				<a class="details-movie" > {{ twit.text }}</a>
+			</div>
+			<div class="twitData">
+				<b >{{twit.retweet_count}}</b>
+				<b class="word">RETWEETS</b>
+				<b class="space"></b>
+				<b>{{ twit.favorite_count }}</b>
+				<b class="word">FAVORITES</b>
+			</div>
+			<div class="groupButton">
+				<div class="col-3">
+					<i class="fa fa-reply fa-2x"></i>
+				</div>
+				<div class="col-3">
+					<i class="fa fa-retweet fa-2x"></i>
+				</div>
+				<div class="col-3">
+					<i class="fa fa-star fa-2x"></i>
+				</div>
+				<div class="col-3">
+					<i class="fa fa-circle"></i>
+					<i class="fa fa-circle"></i>
+					<i class="fa fa-circle"></i>
+				</div>
+			</div>
+
+			
+
+
+		</div>	
+
 </div>
+

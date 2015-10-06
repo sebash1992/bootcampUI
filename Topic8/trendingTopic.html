@@ -1,8 +1,9 @@
 <div class="container" >
 	<div ng-repeat="tr in trends">
-		<div>		    		
+		<div class="trending" ng-click="go(tr.query,'/trendDetails')">		    		
 
-    		<a class="details-movie" href="#/trendDetails/{{ tr.query }}"> {{ tr.name }}</a>
+    		<a class="trendingName" > {{ tr.name }}</a>
+    		<i class="fa fa-angle-right fa-2x"></i>
 				
 		</div>
 	</div>

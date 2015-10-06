@@ -1,10 +1,9 @@
 body {
     background: #fff;
-    color: #292f33;
     font-size: 14px;
  	 font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
 
+}
 
 .col-1, .col-2, .col-3, .col-4, .col-6 {
 	float: left;
@@ -17,23 +16,46 @@ body {
  .col-2 { width: 16.66%; }
  .col-3 { width: 25%; }
  .col-4 { width: 33.33%; }
- .col-6 { width: 50%; }
+ .col-6 { width: 50%; } 
+ .col-10 { width: 80%; }
  .col-12 { width: 100%; }
 
 .clearboth{
 	clear:both;
 }
+
+
+header h1{
+    background-color: #55acee;
+    margin: 0;
+    color: #fff;
+    padding: 7px;
+    font-size: 23px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+header .header-text{
+    font-size: 18px;
+}
+
+i.fa-twitter{
+    color: #3B90CE;;
+}
+
+header i.fa-twitter{
+    color: #21759b;
+    margin-right: 7px;
+}
+
 .content {
 }
-.menu{
- 	width:100%;
-}
-.profilePicture {
+.twitContent .profilePicture {
     width: 48px;
     height: 48px;
-    border-radius: 5px;
+    border-radius: 10px;
 }
-.fullName {
+.twitContent .fullName {
     font-weight: bold;
     color: #292f33;
 }
@@ -44,25 +66,205 @@ body {
     color: #8899a6;
 }
 
-.textSize {
+.twitContent .textSize {
 	margin:2px;
+  padding: 10px;
     padding-left: 5px;
 }
 .context {
-}
-.twitContent{
-	margin:10px;
 }
 
 .twitContent{
     position: relative;
     min-height: 51px;
-    padding: 9px 12px;
+    padding: 9px 5px;
     border-bottom: 2px solid #e1e8ed;
 }
-.twitsContent{
-    position: relative;
-    min-height: 51px;
-    padding: 9px 12px;
+
+
+.container{
+    max-width: 830px;
+    min-width: 755px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+header{
+    max-width: 830px;
+    min-width: 755px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.menu{
+    background-color: #292133;
+    padding: 15px 10px;
+}
+
+
+
+.twitContent .blockUserBtn{
+     float:right;
+  background: #e1e8ed;
+  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+  background-image: -o-linear-gradient(top, #3498db, #2980b9);
+  background-image: linear-gradient(to bottom, #3498db, #2980b9);
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  border-radius: 5px;
+  font-family: Arial;
+  color: #e1e8ed;
+  font-size: 14px;
+  background: #e1e8ed;
+  border: solid #e1e8ed 1px;
+  text-decoration: none;
+}
+
+.twitContent .blockUserBtn:hover {
+  background: #3cb0fd;
+  text-decoration: none;
+}
+.twitContent .blockUserBtn .fa-ban{
+     color: #21759b;
+}
+.blockedUser{
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin:15px;    
     border-bottom: 2px solid #e1e8ed;
+
+}
+.blockedUser b{  
+    margin-top: 5px;
+    font-size: 15px;
+    direction: ltr;
+    color: #8899a6;
+}
+.blockedUser .fa {
+  float: right;
+  color: #8899a6;
+  cursor: pointer;
+}
+
+.inputBlockUser{
+  width: 85%;
+  border-radius: 5px;
+  font-size: 20px;
+  color: #2E64FE;
+  border: 3px solid #e1e8ed;
+}
+
+.formUser{
+  padding: 10px;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.formUser button{
+
+ float:right;
+  background: #e1e8ed;
+  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+  background-image: -o-linear-gradient(top, #3498db, #2980b9);
+  background-image: linear-gradient(to bottom, #3498db, #2980b9);
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  border-radius: 5px;
+  font-family: Arial;
+  font-size: 14px;
+  background: #e1e8ed;
+  border: solid #e1e8ed 1px;
+  text-decoration: none;
+
+}
+
+.formUser button:hover {
+  background: #08088A;
+  text-decoration: none;
+}
+.fa-plus{
+  color: #4099FF;
+}
+.twitDetail img{
+  width: 75px;
+  height: 75px;
+  border-radius: 10px;
+}
+
+.twitDetail .user{
+  padding: 20px;
+}
+
+.twitDetail .textSize a{
+    font-size: 18px;
+}
+.twitDetail .twitHeader button{
+ float:right;
+  background: #e1e8ed;
+  background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+  background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+  background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+  background-image: -o-linear-gradient(top, #3498db, #2980b9);
+  background-image: linear-gradient(to bottom, #3498db, #2980b9);
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  border-radius: 5px;
+  font-family: Arial;
+  font-size: 14px;
+  background: #e1e8ed;
+  border: solid #e1e8ed 1px;
+  text-decoration: none;
+}
+
+
+.twitDetail .twitHeader button:hover {
+  background: #4099FF;
+  text-decoration: none;
+}
+.trending{
+  padding: 15px;
+  border-bottom: 2px solid #e1e8ed;
+}
+.twitDetail .textSize{
+
+  border-bottom: 2px solid #e1e8ed;
+}
+
+
+.twitDetail .twitData{
+  border-bottom: 2px solid #e1e8ed;
+  padding: 15px;
+}
+
+
+.twitDetail .space{
+  padding-left: 15px;
+}
+
+.twitDetail .word{
+  color:#BDBDBD;
+  font-size: 12px;
+}
+
+.fa-circle{
+  margin-top: 10px;
+}
+.twitDetail .groupButton .fa{
+  color:#BDBDBD;
+}
+.twitDetail .groupButton{
+  padding: 15px;
+}
+
+.trending .trendingName{
+  font-weight: bold;
+}
+
+.trending .fa{
+  float:right;
+  color:#BDBDBD;  
+  cursor: pointer;
 }
