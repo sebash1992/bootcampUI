@@ -1,15 +1,16 @@
 <div class="container" >
-	<div ng-repeat="tw in twits track by $index" >
+	<div ng-repeat="tw in twits track by $index" ng-click="go($index,'/trendingTwitDetails')">
 		<div class="context">
+
 		</div>
-		<div class="twitContent" ng-click="go($index,'/twitDetails')" >
+		<div class="twitContent" >
 			<div class="twitHeader">
 				<a>
 					<img class="profilePicture col-1" src="{{ tw.user.profile_image_url}}">
-					<strong class="fullName">{{ tw.user.name }}</strong>
+					<strong class="fullName" >{{ tw.user.name }}</strong>
 					<span>‏&rlm;</span>
 					<span class="userName">
-						<s>@</s>
+						<b>@</b>
 						<b>{{ tw.user.screen_name }}</b>
 						<b class="timeDiff">{{tw.timeDiff}}</b>
 					</span>
@@ -17,7 +18,7 @@
 			</div>
 			<p class="textSize">
 				
-    			<a ng-bind-html="tw.text"></a>
+    			<a ng-bind-html="tw.text">s</a>
 			</p>
 
 		</div>	

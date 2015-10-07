@@ -1,4 +1,4 @@
-var finalApp = angular.module('finalApp', ['ngRoute','ngMessages']);
+var finalApp = angular.module('finalApp', ['ngRoute','ngSanitize']);
 
 finalApp.config(function($routeProvider) {
 	$routeProvider
@@ -19,21 +19,42 @@ finalApp.config(function($routeProvider) {
 	        controller  : 'TwitDetailsCtrl'
 	    })
 	      .when('/trendDetails/:trend', {
-	        templateUrl : 'home.html',
+	        templateUrl : 'trendDetailTwitList.html',
 	        controller  : 'TrendDetailsCtrl'
 	    })
+	      .when('/trendingTwitDetails/:tiwtId', {
+	        templateUrl : 'trendingTwitDetails.html',
+	        controller  : 'TrendTwitDetailsCtrl'
+	    }) 
+
 });
 
-finalApp.controller('TimelineCtrl', function($scope, $http,$location,addBlockedUser) {
+finalApp.controller('TimelineCtrl', function($scope, $http,$location,addBlockedUser,timeDiff,$sanitize,convertHTML) {
 
 		$scope.blocks=addBlockedUser;
-		    $http.get('http://localhost:3000/timeline?count=10')
+		    $http.get('http://localhost:3000/timeline?count=50')
 		    .success(function(response) {
 		    	$scope.twitsWithBlocs=response;
 		    	$scope.twits=[];
 		    	for(var i = 0; i < $scope.twitsWithBlocs.length; i++) {
 		    		if(!isBlock($scope.twitsWithBlocs[i].user.screen_name)){
-		    			$scope.twits.push($scope.twitsWithBlocs[i]);
+
+		    			var tiempo = timeDiff.getTimeDiff($scope.twitsWithBlocs[i].created_at), date = new Date($scope.twitsWithBlocs[i].created_at);						
+
+						var textoWithURL = convertHTML.getURLs($scope.twitsWithBlocs[i].text);
+						var textoWithURLUSERS = convertHTML.getUsers(textoWithURL);
+						var textoWithURLUSERSHASH = convertHTML.getHashs(textoWithURLUSERS);						 
+
+						var toSend = $sanitize(textoWithURLUSERSHASH);
+						var newTwit = {
+							text: toSend, 
+							created_at: date.getTime(),
+							timeDiff: tiempo,
+							retweet_count: $scope.twitsWithBlocs[i].retweet_count,
+							favorite_count: $scope.twitsWithBlocs[i].favorite_count, 
+							user: $scope.twitsWithBlocs[i].user, 
+						};
+		    			$scope.twits.push(newTwit);
 		    		}
 		    	}
 		    	localStorage.setItem('twits-ls', JSON.stringify($scope.twits));
@@ -61,9 +82,10 @@ finalApp.controller('TimelineCtrl', function($scope, $http,$location,addBlockedU
 			addBlockedUser.addUser(userName);
 				    	
 		};
+
 });
-finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$location','addBlockedUser', function ($scope, $http, $routeParams,$location,addBlockedUser) {
-		$scope.blocks=localStorage.getItem('blockUsers');
+finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$location','addBlockedUser','timeDiff','$sanitize','convertHTML', function ($scope, $http, $routeParams,$location,addBlockedUser,timeDiff,$sanitize,convertHTML) {
+		var blocks=addBlockedUser;
 		var str = $routeParams.trend;
 		var res = str.replace("#", "%23");
 
@@ -73,12 +95,28 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$loca
 		    	$scope.twits=[];
 		    	for(var i = 0; i < $scope.twitsWithBlocs.length; i++) {
 		    		if(!isBlock($scope.twitsWithBlocs[i].user.screen_name)){
-		    			$scope.twits.push($scope.twitsWithBlocs[i]);
+		    			var tiempo = timeDiff.getTimeDiff($scope.twitsWithBlocs[i].created_at), date = new Date($scope.twitsWithBlocs[i].created_at);						
+
+						var textoWithURL = convertHTML.getURLs($scope.twitsWithBlocs[i].text);
+						var textoWithURLUSERS = convertHTML.getUsers(textoWithURL);
+						var textoWithURLUSERSHASH = convertHTML.getHashs(textoWithURLUSERS);						 
+
+						 var toSend = $sanitize(textoWithURLUSERSHASH);
+						var newTwit = {
+							text: toSend, 
+							created_at: date.getTime(),
+							timeDiff: tiempo,
+							retweet_count: $scope.twitsWithBlocs[i].retweet_count,
+							favorite_count: $scope.twitsWithBlocs[i].favorite_count, 
+							user: $scope.twitsWithBlocs[i].user, 
+						};
+		    			$scope.twits.push(newTwit);
 		    		}
 		    	}
 		    	localStorage.setItem('twits-ls', JSON.stringify($scope.twits));
 
 		    });
+		  	
 		$scope.BlockUser = function(twitId) {
 			var user = $scope.twits[twitId].user.screen_name;
 			var userName = '@'+user;
@@ -88,9 +126,9 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$loca
 
 		function isBlock(userId){
 		    	var userName = "@"+userId;
-		    	for(var i = 0; i < $scope.blocks.length; i++) {
+		    	for(var i = 0; i < blocks.length; i++) {
           
-	                if($scope.blocks[i].name==userName){
+	                if(blocks[i].name==userName){
 	                	return true;
 	                }
             	}
@@ -115,6 +153,18 @@ finalApp.controller('TwitDetailsCtrl', ['$scope', '$routeParams','addBlockedUser
 		};
 }]);
 
+finalApp.controller('TrendTwitDetailsCtrl', ['$scope', '$routeParams','addBlockedUser', function ($scope, $routeParams,addBlockedUser) {
+
+		var twits = JSON.parse(localStorage.getItem('twits-ls'));
+    	$scope.twit = twits[$routeParams.tiwtId];
+
+    	$scope.BlockUser = function(user) {
+			var userName = '@'+user;			
+			addBlockedUser.addUser(userName);
+				    	
+		};
+}]);
+
 finalApp.controller('BlockUsersCtrl', function($scope, $http , addBlockedUser) {
 
 		$scope.blocks=addBlockedUser;
@@ -126,7 +176,7 @@ finalApp.controller('BlockUsersCtrl', function($scope, $http , addBlockedUser) {
 
 		 $scope.BlockUser = function (user) {
 		 	if(!isBlock(user)){	
-				addBlockedUser.addUser(user);
+				addBlockedUser.addUser(user.name);
 		 	}else{
 		 		alert("el usuario existe");
 		 	}
@@ -180,6 +230,36 @@ finalApp.directive('twitterValidate', function() {
     };
 });
 
+finalApp.factory('convertHTML', function () {
+    
+    return {       
+
+        getURLs: function(text) {
+		    var urlRegex = /(https?:\/\/[^\s]+)/g;
+		    return text.replace(urlRegex, function(url) {
+		        return '<a href="' + url + '">' + url + '</a>';
+		    })
+		},
+
+		getHashs: function(text) {  
+		  	return text.replace(/[#]+[A-Za-z0-9-_]+/g, function(e) { 
+		    	var tag = e.replace("#","%23");
+		    	//return e.link(urlServer+"search?q="+tag); 
+		    	return '<a href="http://localhost:8080/#/trends/'+tag + '" >' + e + '</a>';
+
+		  	});
+		},		
+
+        getUsers: function(text) {  
+		  	return text.replace(/[@]+[A-Za-z0-9-_]+/g, function(u) { 
+		    	var user = u.replace("@","");
+		    	//return u.link("http://twitter.com/"+user); 
+		    	  return u.link("http://twitter.com/"+user);
+			});
+		},
+    };
+});
+
 finalApp.factory("addBlockedUser", function() {
 
   	var userList;
@@ -200,4 +280,37 @@ finalApp.factory("addBlockedUser", function() {
 	};
 
 	return userList;
+});
+
+finalApp.factory('timeDiff', function () {
+    
+    return {
+        getTimeDiff: function(start) {
+        	
+            var date = new Date(start), dateNow = new Date();
+			var diferencia = dateNow.getTime() - date.getTime();
+		   	var dias = Math.floor(diferencia / (1000 * 60 * 60 * 24)), 
+		   	hrs = Math.floor(diferencia / (1000 * 60 * 60)), 
+		   	min = Math.floor(diferencia / (1000 * 60)), 
+		   	seg = Math.floor(diferencia / 1000);
+		   	if(dias > 0){
+		   		tiempo = dias+ 'd';
+		   	}
+		   	else{
+		   		if(hrs>0){
+		   			tiempo = hrs+ 'h';
+		   		}
+		   		else{
+		   			if(min > 0){
+		   				tiempo = min+'m';
+		   			}
+		   			else{
+		   				tiempo = seg+'s';
+		   			}
+		   		}
+		   	}
+		   	//console.log('La diferencia es de ' + dias + ' dias, o '+hrs+' horas, o ' +min+ ' min, o '+ seg + ' segundos. Tiempo: '+tiempo);
+		   	return tiempo;
+        }
+    };
 });

@@ -1,5 +1,5 @@
 <div class="container" >
-	<div class="twitDetail" >
+	<div class="tttwitDetail" >
 			<div class="twitHeader">
 				<a>
 					<img class="profilePicture col-1" src="{{ twit.user.profile_image_url}}">
@@ -24,37 +24,13 @@
 			</div>
 			<div class="textSize">
 				
-				<a class="details-movie"  ng-bind-html="twit.text" ></a>
+				<a ng-bind-html="twit.text" ></a>
 			</div>
-
 			<div>
 				<b class="time">{{twit.created_at | date:"h:mma '-' d MMM yy"}}<b>
 			</div>
-
-			<div class="twitData">
-				<b >{{twit.retweet_count}}</b>
-				<b class="word">RETWEETS</b>
-				<b class="space"></b>
-				<b>{{ twit.favorite_count }}</b>
-				<b class="word">FAVORITES</b>
-			</div>
 			
-			<div class="groupButton">
-				<div class="col-3">
-					<i class="fa fa-reply fa-2x"></i>
-				</div>
-				<div class="col-3">
-					<i class="fa fa-retweet fa-2x"></i>
-				</div>
-				<div class="col-3">
-					<i class="fa fa-star fa-2x"></i>
-				</div>
-				<div class="col-3">
-					<i class="fa fa-circle"></i>
-					<i class="fa fa-circle"></i>
-					<i class="fa fa-circle"></i>
-				</div>
-			</div>
+	
 
 			
 
@@ -62,4 +38,3 @@
 		</div>	
 
 </div>
-
