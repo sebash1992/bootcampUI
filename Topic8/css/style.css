@@ -2,6 +2,7 @@ body {
     background: #fff;
     font-size: 14px;
  	 font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+   
 
 }
 
@@ -345,3 +346,25 @@ a:link
  text-decoration:none;   
  color:#0084B4;
 } 
+ 
+.menuIcon{
+  text-align: center;  
+  background: #292f33;
+  padding-bottom:  : 20px;
+}
+.mimenu{
+ color:white;
+ padding-bottom: 50px;
+ font-size: 20px;
+}
+.active{
+  background: #003580;
+}
+
+nav a.active{
+  color: #fff;
+}
+
+nav a.active i{
+  color: #fff;
+}

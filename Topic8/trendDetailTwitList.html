@@ -1,5 +1,5 @@
 <div class="container" >
-	<div ng-repeat="tw in twits track by $index" ng-click="go($index,'/trendingTwitDetails')">
+	<div ng-repeat="tw in twits  | filter:isBlock track by $index " ng-click="go(twits.indexOf(tw),'/trendingTwitDetails')">
 		<div class="context">
 
 		</div>
@@ -18,7 +18,8 @@
 			</div>
 			<p class="textSize">
 				
-    			<a ng-bind-html="tw.text">s</a>
+    			
+				 <div compile="tw.text"></div>
 			</p>
 
 		</div>	

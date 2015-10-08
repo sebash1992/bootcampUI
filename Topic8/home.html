@@ -1,8 +1,8 @@
 <div class="container" >
-	<div ng-repeat="tw in twits track by $index" >
+	<div ng-repeat="tw in twits | filter:isBlock track by $index " >
 		<div class="context">
 		</div>
-		<div class="twitContent" ng-click="go($index,'/twitDetails')" >
+		<div class="twitContent" ng-click="go(twits.indexOf(tw),'/twitDetails')" >
 			<div class="twitHeader">
 				<a>
 					<img class="profilePicture col-1" src="{{ tw.user.profile_image_url}}">
@@ -15,10 +15,10 @@
 					</span>
 				</a>
 			</div>
-			<p class="textSize">
-				
-    			<a ng-bind-html="tw.text"></a>
-			</p>
+			<div class="textSize">
+				 
+				 <div compile="tw.text"></div>
+			</div>
 
 		</div>	
 	</div>

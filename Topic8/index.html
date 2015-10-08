@@ -21,13 +21,36 @@
 	 
 	<body>
 	<div ng-app="finalApp">
-		<header >
-			<h1><i class="fa fa-twitter fa-lg"></i><span class="header">Home</span></h1>
-			<nav class="menu">
-				<a href="#/"><i class="fa fa-home fa-lg"></i>Home</a>
-				<a href="#/block"><i class="fa fa-ban fa-lg"></i>Blocked Users</a>
-				<a href="#/TT"><i class="fa fa-slack fa-lg"></i>Trends</a>
+		<header ng-controller="MenuCtrl">
+			<h1><i class="fa fa-twitter fa-lg"></i><span class="header">{{title}}</span></h1>
+
+			<nav class="col-12 mimenu">
+						<a is-active-nav href="#/" ng-class="getPath('/')" class="col-4 menuIcon">
+							<div >
+							<i class="fa fa-home fa-lg"></i>
+							</div>
+							<div>
+								Home
+							</div>
+						</a>
+						<a is-active-nav href="#/block" ng-class="getPath('/block')"  class="col-4 menuIcon">
+							<div >
+							<i class="fa fa-ban fa-lg"></i>
+							</div>
+							<div>
+								Blocked Users
+							</div>
+						</a>
+						<a is-active-nav href="#/TT" ng-class="getPath('/TT')" class="col-4 menuIcon">
+							<div >
+							<i class="fa fa-slack fa-lg"></i>
+							</div>
+							<div>
+								Trends
+							</div>
+						</a>
 			</nav>
+			
 		</header>
 	
 

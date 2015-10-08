@@ -29,15 +29,47 @@ finalApp.config(function($routeProvider) {
 
 });
 
+finalApp.controller('MenuCtrl', ['$scope', '$location', function ($scope, $location) {
+	
+	$scope.title = "Home";
+	$scope.getPath = function (path) {
+
+		var userRegex = /^\/block/, trendRegex = /^\/TT/, path_to_compare = "";
+
+		if(($location.path()).search(userRegex) != -1){
+			$scope.title = "Blocked Users";
+			path_to_compare = ($location.path()).replace($location.path(), '/block');
+		}
+		else{
+			if(($location.path()).search(trendRegex) != -1){
+				$scope.title = "Trendng Topics";
+				path_to_compare = ($location.path()).replace($location.path(), '/TT');
+			}
+			else{
+				$scope.title = "Home";
+				path_to_compare = ($location.path()).replace($location.path(), '/');
+			}
+		}
+	
+		if (path_to_compare === path) {
+			return 'active';
+		} else {
+			return '';
+		}
+	}
+	
+	
+}]);
+
 finalApp.controller('TimelineCtrl', function($scope, $http,$location,addBlockedUser,timeDiff,$sanitize,convertHTML) {
 
-		$scope.blocks=addBlockedUser;
+		var blocks=addBlockedUser;
 		    $http.get('http://localhost:3000/timeline?count=50')
 		    .success(function(response) {
 		    	$scope.twitsWithBlocs=response;
 		    	$scope.twits=[];
 		    	for(var i = 0; i < $scope.twitsWithBlocs.length; i++) {
-		    		if(!isBlock($scope.twitsWithBlocs[i].user.screen_name)){
+		    		
 
 		    			var tiempo = timeDiff.getTimeDiff($scope.twitsWithBlocs[i].created_at), date = new Date($scope.twitsWithBlocs[i].created_at);						
 
@@ -55,7 +87,7 @@ finalApp.controller('TimelineCtrl', function($scope, $http,$location,addBlockedU
 							user: $scope.twitsWithBlocs[i].user, 
 						};
 		    			$scope.twits.push(newTwit);
-		    		}
+		    		
 		    	}
 		    	localStorage.setItem('twits-ls', JSON.stringify($scope.twits));
 
@@ -65,16 +97,15 @@ finalApp.controller('TimelineCtrl', function($scope, $http,$location,addBlockedU
 			  $location.path( path2 );
 			};
 
-		    function isBlock(userId){
-		    	var userName = "@"+userId;
-		    	for(var i = 0; i < $scope.blocks.length; i++) {
+		     $scope.isBlock = function(userId){
+		    	var userName = "@"+userId.user.screen_name;
+		    	for(var i = 0; i < blocks.length; i++) {
           
-	                if($scope.blocks[i].name==userName){
-	                	return true;
+	                if(blocks[i].name==userName){
+	                	return false;
 	                }
             	}
-            	return false;
-        
+            	return true;        
 		    }
 		$scope.BlockUser = function(twitId) {
 			var user = $scope.twits[twitId].user.screen_name;
@@ -94,7 +125,6 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$loca
 		    	$scope.twitsWithBlocs=response.statuses;
 		    	$scope.twits=[];
 		    	for(var i = 0; i < $scope.twitsWithBlocs.length; i++) {
-		    		if(!isBlock($scope.twitsWithBlocs[i].user.screen_name)){
 		    			var tiempo = timeDiff.getTimeDiff($scope.twitsWithBlocs[i].created_at), date = new Date($scope.twitsWithBlocs[i].created_at);						
 
 						var textoWithURL = convertHTML.getURLs($scope.twitsWithBlocs[i].text);
@@ -111,7 +141,6 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$loca
 							user: $scope.twitsWithBlocs[i].user, 
 						};
 		    			$scope.twits.push(newTwit);
-		    		}
 		    	}
 		    	localStorage.setItem('twits-ls', JSON.stringify($scope.twits));
 
@@ -124,17 +153,18 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$loca
 				    	
 		};
 
-		function isBlock(userId){
-		    	var userName = "@"+userId;
-		    	for(var i = 0; i < blocks.length; i++) {
-          
-	                if(blocks[i].name==userName){
-	                	return true;
-	                }
-            	}
-            	return false;
-        
-		    }
+		
+	    $scope.isBlock = function(userId){
+	    	var userName = "@"+userId.user.screen_name;
+	    	for(var i = 0; i <blocks.length; i++) {
+      
+                if(blocks[i].name==userName){
+                	return false;
+                }
+        	}
+        	return true;        
+	    }
+
 		 $scope.go = function ( index,path ) {
 		    	var path2=path + '/'+index
 			  $location.path( path2 );
@@ -203,7 +233,6 @@ finalApp.controller('TrendTopicCtrl', function($scope, $http, $location) {
 		    });
 
 		     $scope.go = function ( index,path ) {
-		     	console.log(index);
 		    	var path2=path + '/'+index
 			  $location.path( path2 );
 			};
@@ -230,6 +259,8 @@ finalApp.directive('twitterValidate', function() {
     };
 });
 
+
+
 finalApp.factory('convertHTML', function () {
     
     return {       
@@ -237,7 +268,7 @@ finalApp.factory('convertHTML', function () {
         getURLs: function(text) {
 		    var urlRegex = /(https?:\/\/[^\s]+)/g;
 		    return text.replace(urlRegex, function(url) {
-		        return '<a href="' + url + '">' + url + '</a>';
+		        return '<a  href="' + url + '" ng-click="$event.stopPropagation();" >' + url + '</a>';
 		    })
 		},
 
@@ -245,7 +276,7 @@ finalApp.factory('convertHTML', function () {
 		  	return text.replace(/[#]+[A-Za-z0-9-_]+/g, function(e) { 
 		    	var tag = e.replace("#","%23");
 		    	//return e.link(urlServer+"search?q="+tag); 
-		    	return '<a href="http://localhost:8080/#/trends/'+tag + '" >' + e + '</a>';
+		    	return '<a href="#/trendDetails/'+tag + '" ng-click="$event.stopPropagation();">' + e + '</a>';
 
 		  	});
 		},		
@@ -254,7 +285,7 @@ finalApp.factory('convertHTML', function () {
 		  	return text.replace(/[@]+[A-Za-z0-9-_]+/g, function(u) { 
 		    	var user = u.replace("@","");
 		    	//return u.link("http://twitter.com/"+user); 
-		    	  return u.link("http://twitter.com/"+user);
+		    	 return '<a href="' + "http://twitter.com/"+user + ' >@' + user + ' ng-click="$event.stopPropagation();" </a>';
 			});
 		},
     };
@@ -309,8 +340,47 @@ finalApp.factory('timeDiff', function () {
 		   			}
 		   		}
 		   	}
-		   	//console.log('La diferencia es de ' + dias + ' dias, o '+hrs+' horas, o ' +min+ ' min, o '+ seg + ' segundos. Tiempo: '+tiempo);
 		   	return tiempo;
         }
     };
 });
+
+
+
+finalApp.directive('isActiveNav', [ '$location', function($location) {
+return {
+ restrict: 'A',
+ link: function(scope, element) {
+   scope.location = $location;
+   scope.$watch('location.path()', function(currentPath) {
+     if('/#' + currentPath === element[0].attributes['href'].nodeValue) {
+       element.parent().addClass('active');
+     } else {
+       element.parent().removeClass('active');
+     }
+   });
+ }
+ };
+}]);
+
+finalApp.directive('compile', ['$compile', function ($compile) {
+    return function(scope, element, attrs) {
+      scope.$watch(
+        function(scope) {
+          // watch the 'compile' expression for changes
+          return scope.$eval(attrs.compile);
+        },
+        function(value) {
+          // when the 'compile' expression changes
+          // assign it into the current DOM
+          element.html(value);
+
+          // compile the new DOM and link it to the current
+          // scope.
+          // NOTE: we only compile .childNodes so that
+          // we don't get into infinite loop compiling ourselves
+          $compile(element.contents())(scope);
+        }
+    );
+  };
+}]);

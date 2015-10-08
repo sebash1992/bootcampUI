@@ -24,7 +24,8 @@
 			</div>
 			<div class="textSize">
 				
-				<a ng-bind-html="twit.text" ></a>
+				
+				 <div compile="twit.text"></div>
 			</div>
 			<div>
 				<b class="time">{{twit.created_at | date:"h:mma '-' d MMM yy"}}<b>
