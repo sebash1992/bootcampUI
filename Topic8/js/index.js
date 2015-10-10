@@ -1,4 +1,4 @@
-var finalApp = angular.module('finalApp', ['ngRoute','ngSanitize']);
+var finalApp = angular.module('finalApp', ['ngRoute']);
 
 finalApp.config(function($routeProvider) {
 	$routeProvider
@@ -42,7 +42,7 @@ finalApp.controller('MenuCtrl', ['$scope', '$location', function ($scope, $locat
 		}
 		else{
 			if(($location.path()).search(trendRegex) != -1){
-				$scope.title = "Trendng Topics";
+				$scope.title = "Trending Topics";
 				path_to_compare = ($location.path()).replace($location.path(), '/TT');
 			}
 			else{
@@ -50,41 +50,65 @@ finalApp.controller('MenuCtrl', ['$scope', '$location', function ($scope, $locat
 				path_to_compare = ($location.path()).replace($location.path(), '/');
 			}
 		}
-	
-		if (path_to_compare === path) {
-			return 'active';
-		} else {
-			return '';
-		}
 	}
 	
 	
 }]);
 
-finalApp.controller('TimelineCtrl', function($scope, $http,$location,addBlockedUser,timeDiff,$sanitize,convertHTML) {
+finalApp.controller('TimelineCtrl', function($scope, $http,$location,UserBlocked,DiffBetweenTimes,convertHTML) {
 
-		var blocks=addBlockedUser;
+		var blocks=UserBlocked;
 		    $http.get('http://localhost:3000/timeline?count=50')
 		    .success(function(response) {
 		    	$scope.twitsWithBlocs=response;
 		    	$scope.twits=[];
 		    	for(var i = 0; i < $scope.twitsWithBlocs.length; i++) {
-		    		
 
-		    			var tiempo = timeDiff.getTimeDiff($scope.twitsWithBlocs[i].created_at), date = new Date($scope.twitsWithBlocs[i].created_at);						
+						if($scope.twitsWithBlocs[i].retweeted_status !=undefined){
+		    				var twitText = $scope.twitsWithBlocs[i].retweeted_status.text;
+		    				var retweetedBy= '<i class="fa fa-retweet"></i>' + '   '+$scope.twitsWithBlocs[i].user.name +' retweeted';
+		    				var twittedBy= $scope.twitsWithBlocs[i].retweeted_status.user ;
+		    				var tiempo = DiffBetweenTimes.getDiffBetweenTimes($scope.twitsWithBlocs[i].retweeted_status.created_at), date = new Date($scope.twitsWithBlocs[i].retweeted_status.created_at);						
+		    				var retweets = $scope.twitsWithBlocs[i].retweeted_status.retweet_count;
+		    				var favourites = $scope.twitsWithBlocs[i].retweeted_status.favorite_count;
 
-						var textoWithURL = convertHTML.getURLs($scope.twitsWithBlocs[i].text);
+		    				if($scope.twitsWithBlocs[i].extended_entities!=undefined){
+
+			    				var media = '<img  class="twitPhoto" src="'+ $scope.twitsWithBlocs[i].retweeted_status.extended_entities.media[0].media_url+'">';
+			    			}else{
+			    				var media = "";
+			    			}
+		    			}else{
+		    				var tiempo = DiffBetweenTimes.getDiffBetweenTimes($scope.twitsWithBlocs[i].created_at), date = new Date($scope.twitsWithBlocs[i].created_at);						
+		    				var twitText = $scope.twitsWithBlocs[i].text;
+		    				var retweetedBy="";
+		    				var twittedBy= $scope.twitsWithBlocs[i].user;
+		    				var retweets= $scope.twitsWithBlocs[i].retweet_count;
+							var favourites = $scope.twitsWithBlocs[i].favorite_count; 
+
+							if($scope.twitsWithBlocs[i].extended_entities!=undefined){
+
+			    				var media = '<img class="twitPhoto" src="'+$scope.twitsWithBlocs[i].extended_entities.media[0].media_url+'">';
+			    			}else{
+			    				var media = "";
+			    			}
+		    			}
+		    			
+
+						var textoWithURL = convertHTML.getURLs(twitText);
 						var textoWithURLUSERS = convertHTML.getUsers(textoWithURL);
-						var textoWithURLUSERSHASH = convertHTML.getHashs(textoWithURLUSERS);						 
+						var textoWithURLUSERSHASH = convertHTML.getHashs(textoWithURLUSERS);		
 
-						var toSend = $sanitize(textoWithURLUSERSHASH);
 						var newTwit = {
-							text: toSend, 
+							photo:media,
+							owner:$scope.twitsWithBlocs[i].user,
+							rt:retweetedBy,
+							text: textoWithURLUSERSHASH, 
 							created_at: date.getTime(),
-							timeDiff: tiempo,
-							retweet_count: $scope.twitsWithBlocs[i].retweet_count,
-							favorite_count: $scope.twitsWithBlocs[i].favorite_count, 
-							user: $scope.twitsWithBlocs[i].user, 
+							DiffBetweenTimes: tiempo,
+							retweet_count: retweets,
+							favorite_count: favourites, 
+							user: twittedBy, 
 						};
 		    			$scope.twits.push(newTwit);
 		    		
@@ -98,7 +122,7 @@ finalApp.controller('TimelineCtrl', function($scope, $http,$location,addBlockedU
 			};
 
 		     $scope.isBlock = function(userId){
-		    	var userName = "@"+userId.user.screen_name;
+		    	var userName = "@"+userId.owner.screen_name;
 		    	for(var i = 0; i < blocks.length; i++) {
           
 	                if(blocks[i].name==userName){
@@ -107,16 +131,16 @@ finalApp.controller('TimelineCtrl', function($scope, $http,$location,addBlockedU
             	}
             	return true;        
 		    }
-		$scope.BlockUser = function(twitId) {
-			var user = $scope.twits[twitId].user.screen_name;
-			var userName = '@'+user;
-			addBlockedUser.addUser(userName);
-				    	
-		};
+			$scope.BlockUser = function(twitId) {
+				var user = $scope.twits[twitId].user.screen_name;
+				var userName = '@'+user;
+				UserBlocked.addUser(userName);
+					    	
+			};
 
 });
-finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$location','addBlockedUser','timeDiff','$sanitize','convertHTML', function ($scope, $http, $routeParams,$location,addBlockedUser,timeDiff,$sanitize,convertHTML) {
-		var blocks=addBlockedUser;
+finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$location','UserBlocked','DiffBetweenTimes','convertHTML', function ($scope, $http, $routeParams,$location,UserBlocked,DiffBetweenTimes,convertHTML) {
+		var blocks=UserBlocked;
 		var str = $routeParams.trend;
 		var res = str.replace("#", "%23");
 
@@ -125,20 +149,49 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$loca
 		    	$scope.twitsWithBlocs=response.statuses;
 		    	$scope.twits=[];
 		    	for(var i = 0; i < $scope.twitsWithBlocs.length; i++) {
-		    			var tiempo = timeDiff.getTimeDiff($scope.twitsWithBlocs[i].created_at), date = new Date($scope.twitsWithBlocs[i].created_at);						
 
-						var textoWithURL = convertHTML.getURLs($scope.twitsWithBlocs[i].text);
+		    			if($scope.twitsWithBlocs[i].retweeted_status !=undefined){
+		    				var twitText = $scope.twitsWithBlocs[i].retweeted_status.text;
+		    				var retweetedBy= '<i class="fa fa-retweet"></i>' + '   '+$scope.twitsWithBlocs[i].user.name +' retweeted';
+		    				var twittedBy= $scope.twitsWithBlocs[i].retweeted_status.user ;
+		    				var tiempo = DiffBetweenTimes.getDiffBetweenTimes($scope.twitsWithBlocs[i].retweeted_status.created_at), date = new Date($scope.twitsWithBlocs[i].retweeted_status.created_at);						
+		    				var retweets = $scope.twitsWithBlocs[i].retweeted_status.retweet_count;
+		    				var favourites = $scope.twitsWithBlocs[i].retweeted_status.favorite_count;
+		    				if($scope.twitsWithBlocs[i].retweeted_status.entities.media!=undefined){
+		    					var media = '<img class="twitPhoto" src="'+$scope.twitsWithBlocs[i].retweeted_status.entities.media[0].media_url+'">';
+			    			}else{
+			    				var media = "";
+			    			}
+		    			}else{
+		    				var tiempo = DiffBetweenTimes.getDiffBetweenTimes($scope.twitsWithBlocs[i].created_at), date = new Date($scope.twitsWithBlocs[i].created_at);						
+		    				var twitText = $scope.twitsWithBlocs[i].text;
+		    				var retweetedBy="";
+		    				var twittedBy= $scope.twitsWithBlocs[i].user;
+		    				var retweets= $scope.twitsWithBlocs[i].retweet_count;
+							var favourites = $scope.twitsWithBlocs[i].favorite_count; 
+
+							if($scope.twitsWithBlocs[i].entities.media!=undefined){
+								var media = '<img class="twitPhoto" src="'+$scope.twitsWithBlocs[i].entities.media[0].media_url+'">';
+			    			}else{
+			    				var media = "";
+			    			}
+		    			}
+		    			
+
+						var textoWithURL = convertHTML.getURLs(twitText);
 						var textoWithURLUSERS = convertHTML.getUsers(textoWithURL);
-						var textoWithURLUSERSHASH = convertHTML.getHashs(textoWithURLUSERS);						 
+						var textoWithURLUSERSHASH = convertHTML.getHashs(textoWithURLUSERS);		
 
-						 var toSend = $sanitize(textoWithURLUSERSHASH);
 						var newTwit = {
-							text: toSend, 
+							photo:media,
+							owner:$scope.twitsWithBlocs[i].user,
+							rt:retweetedBy,
+							text: textoWithURLUSERSHASH, 
 							created_at: date.getTime(),
-							timeDiff: tiempo,
-							retweet_count: $scope.twitsWithBlocs[i].retweet_count,
-							favorite_count: $scope.twitsWithBlocs[i].favorite_count, 
-							user: $scope.twitsWithBlocs[i].user, 
+							DiffBetweenTimes: tiempo,
+							retweet_count: retweets,
+							favorite_count: favourites, 
+							user: twittedBy, 
 						};
 		    			$scope.twits.push(newTwit);
 		    	}
@@ -149,13 +202,13 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$loca
 		$scope.BlockUser = function(twitId) {
 			var user = $scope.twits[twitId].user.screen_name;
 			var userName = '@'+user;
-			addBlockedUser.addUser(userName);
+			UserBlocked.addUser(userName);
 				    	
 		};
 
 		
 	    $scope.isBlock = function(userId){
-	    	var userName = "@"+userId.user.screen_name;
+	    	var userName = "@"+userId.owner.screen_name;
 	    	for(var i = 0; i <blocks.length; i++) {
       
                 if(blocks[i].name==userName){
@@ -171,33 +224,33 @@ finalApp.controller('TrendDetailsCtrl', ['$scope','$http', '$routeParams','$loca
 			};
 }]);
 
-finalApp.controller('TwitDetailsCtrl', ['$scope', '$routeParams','addBlockedUser', function ($scope, $routeParams,addBlockedUser) {
+finalApp.controller('TwitDetailsCtrl', ['$scope', '$routeParams','UserBlocked', function ($scope, $routeParams,UserBlocked) {
 
 		var twits = JSON.parse(localStorage.getItem('twits-ls'));
     	$scope.twit = twits[$routeParams.tiwtId];
 
     	$scope.BlockUser = function(user) {
 			var userName = '@'+user;			
-			addBlockedUser.addUser(userName);
+			UserBlocked.addUser(userName);
 				    	
 		};
 }]);
 
-finalApp.controller('TrendTwitDetailsCtrl', ['$scope', '$routeParams','addBlockedUser', function ($scope, $routeParams,addBlockedUser) {
+finalApp.controller('TrendTwitDetailsCtrl', ['$scope', '$routeParams','UserBlocked', function ($scope, $routeParams,UserBlocked) {
 
 		var twits = JSON.parse(localStorage.getItem('twits-ls'));
     	$scope.twit = twits[$routeParams.tiwtId];
 
     	$scope.BlockUser = function(user) {
 			var userName = '@'+user;			
-			addBlockedUser.addUser(userName);
+			UserBlocked.addUser(userName);
 				    	
 		};
 }]);
 
-finalApp.controller('BlockUsersCtrl', function($scope, $http , addBlockedUser) {
+finalApp.controller('BlockUsersCtrl', function($scope, $http , UserBlocked) {
 
-		$scope.blocks=addBlockedUser;
+		$scope.blocks=UserBlocked;
 
 		$scope.NoBlockUser = function(userId) {
 			$scope.blocks.splice(userId,1);
@@ -206,7 +259,7 @@ finalApp.controller('BlockUsersCtrl', function($scope, $http , addBlockedUser) {
 
 		 $scope.BlockUser = function (user) {
 		 	if(!isBlock(user)){	
-				addBlockedUser.addUser(user.name);
+				UserBlocked.addUser(user.name);
 		 	}else{
 		 		alert("el usuario existe");
 		 	}
@@ -268,7 +321,7 @@ finalApp.factory('convertHTML', function () {
         getURLs: function(text) {
 		    var urlRegex = /(https?:\/\/[^\s]+)/g;
 		    return text.replace(urlRegex, function(url) {
-		        return '<a  href="' + url + '" ng-click="$event.stopPropagation();" >' + url + '</a>';
+		        return '<a  href="' + url + '" ng-click="$event.stopPropagation()" >' + url + '</a>';
 		    })
 		},
 
@@ -276,7 +329,7 @@ finalApp.factory('convertHTML', function () {
 		  	return text.replace(/[#]+[A-Za-z0-9-_]+/g, function(e) { 
 		    	var tag = e.replace("#","%23");
 		    	//return e.link(urlServer+"search?q="+tag); 
-		    	return '<a href="#/trendDetails/'+tag + '" ng-click="$event.stopPropagation();">' + e + '</a>';
+		    	return '<a href="#/trendDetails/'+tag + '" ng-click="$event.stopPropagation()">' + e + '</a>';
 
 		  	});
 		},		
@@ -284,39 +337,18 @@ finalApp.factory('convertHTML', function () {
         getUsers: function(text) {  
 		  	return text.replace(/[@]+[A-Za-z0-9-_]+/g, function(u) { 
 		    	var user = u.replace("@","");
-		    	//return u.link("http://twitter.com/"+user); 
-		    	 return '<a href="' + "http://twitter.com/"+user + ' >@' + user + ' ng-click="$event.stopPropagation();" </a>';
+		    	 return '<a href="' + "http://twitter.com/"+user + ' >@' + user + ' ng-click="$event.stopPropagation()" </a>';
 			});
 		},
     };
 });
 
-finalApp.factory("addBlockedUser", function() {
 
-  	var userList;
 
-	if(localStorage.getItem('blockUsers')!==null){
-		userList = JSON.parse(localStorage.getItem('blockUsers'))
-	}
-	else{
-		userList = [];
-		localStorage.setItem('blockUsers', JSON.stringify(userList));
-	}
-
-	userList.addUser = function(screen_name){
-		userList.push({
-			name: screen_name,
-		});
-		localStorage.setItem('blockUsers', JSON.stringify(userList));
-	};
-
-	return userList;
-});
-
-finalApp.factory('timeDiff', function () {
+finalApp.factory('DiffBetweenTimes', function () {
     
     return {
-        getTimeDiff: function(start) {
+        getDiffBetweenTimes: function(start) {
         	
             var date = new Date(start), dateNow = new Date();
 			var diferencia = dateNow.getTime() - date.getTime();
@@ -345,7 +377,27 @@ finalApp.factory('timeDiff', function () {
     };
 });
 
+finalApp.factory("UserBlocked", function() {
 
+  	var UserBlockedList;
+
+	if(localStorage.getItem('blockUsers')!==null){
+		UserBlockedList = JSON.parse(localStorage.getItem('blockUsers'))
+	}
+	else{
+		UserBlockedList = [];
+		localStorage.setItem('blockUsers', JSON.stringify(UserBlockedList));
+	}
+
+	UserBlockedList.addUser = function(screen_name){
+		UserBlockedList.push({
+			name: screen_name,
+		});
+		localStorage.setItem('blockUsers', JSON.stringify(UserBlockedList));
+	};
+
+	return UserBlockedList;
+});
 
 finalApp.directive('isActiveNav', [ '$location', function($location) {
 return {
@@ -353,10 +405,10 @@ return {
  link: function(scope, element) {
    scope.location = $location;
    scope.$watch('location.path()', function(currentPath) {
-     if('/#' + currentPath === element[0].attributes['href'].nodeValue) {
-       element.parent().addClass('active');
+     if('#' + currentPath === element[0].attributes['href'].nodeValue) {
+       element.addClass('active');
      } else {
-       element.parent().removeClass('active');
+       element.removeClass('active');
      }
    });
  }
@@ -365,22 +417,22 @@ return {
 
 finalApp.directive('compile', ['$compile', function ($compile) {
     return function(scope, element, attrs) {
-      scope.$watch(
-        function(scope) {
-          // watch the 'compile' expression for changes
-          return scope.$eval(attrs.compile);
-        },
-        function(value) {
-          // when the 'compile' expression changes
-          // assign it into the current DOM
-          element.html(value);
+        scope.$watch(
+            function(scope) {
+                // watch the 'compile' expression for changes
+                return scope.$eval(attrs.compile);
+            },
+            function(value) {
+                // when the 'compile' expression changes
+                // assign it into the current DOM
+                element.html(value);
 
-          // compile the new DOM and link it to the current
-          // scope.
-          // NOTE: we only compile .childNodes so that
-          // we don't get into infinite loop compiling ourselves
-          $compile(element.contents())(scope);
-        }
-    );
-  };
-}]);
+                // compile the new DOM and link it to the current
+                // scope.
+                // NOTE: we only compile .childNodes so that
+                // we don't get into infinite loop compiling ourselves
+                $compile(element.contents())(scope);
+            }
+        );
+    };
+}])

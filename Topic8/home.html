@@ -1,8 +1,10 @@
-<div class="container" >
-	<div ng-repeat="tw in twits | filter:isBlock track by $index " >
+<div class="container col-12 ">
+	<div ng-repeat="tw in twits | filter:isBlock track by $index "  class="col-12">
 		<div class="context">
 		</div>
 		<div class="twitContent" ng-click="go(twits.indexOf(tw),'/twitDetails')" >
+			<div class="isRetweeted" compile="tw.rt">
+			</div>
 			<div class="twitHeader">
 				<a>
 					<img class="profilePicture col-1" src="{{ tw.user.profile_image_url}}">
@@ -11,14 +13,15 @@
 					<span class="userName">
 						<s>@</s>
 						<b>{{ tw.user.screen_name }}</b>
-						<b class="timeDiff">{{tw.timeDiff}}</b>
+						<b class="timeDiff">{{tw.DiffBetweenTimes}}</b>
 					</span>
 				</a>
 			</div>
-			<div class="textSize">
+
 				 
-				 <div compile="tw.text"></div>
-			</div>
+				 <div  compile="tw.text" class="textSize" ></div>
+			     <div  compile="tw.photo"></div>
+			
 
 		</div>	
 	</div>

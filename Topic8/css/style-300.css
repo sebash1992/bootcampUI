@@ -1,0 +1,85 @@
+@media (max-width: 719px) and (min-width: 300px) {
+     body {
+        font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
+     }
+
+  header h1{;
+      font-size: 20px;
+  }
+
+  header .header-text{
+      font-size: 14px;
+  }
+
+  .twitHeader .profilePicture {
+      width: 65px;
+      height: 65px;
+  }
+  
+  .userName {
+      font-size: 11px;
+  }
+
+  .blockedUser b{  
+      font-size: 15px;
+  }
+
+  .inputBlockUser{
+    font-size: 16px;
+  }
+
+  
+  .twitContent .profilePicture{
+    width: 45px;
+    height: 45px;
+  }
+
+  .twitDetail .profilePicture{
+    width: 55px;
+    height: 55px;
+  }
+
+  .twitDetail .textSize a{
+      font-size: 14px;
+  }
+  
+  .twitDetail .word{
+    font-size: 11px;
+  }
+
+ 
+  .tttwitDetail .textSize a{
+      font-size: 14px;
+  }
+  .tttwitDetail .word{
+    font-size: 10px;
+  }
+
+  .tttwitDetail .time{ 
+    font-size: 11px;
+  }
+
+  .twitDetail .time{ 
+    font-size: 10px;
+  }
+
+  
+  .mimenu{
+   font-size: 12px;
+  }
+
+  .twitContent .twitPhoto{
+    width: 340px;
+    height: 194px;
+  }
+   .tttwitDetail .twitPhoto{
+    width: 540px;
+    height: 309px;
+  }
+   .twitDetail .twitPhoto{
+    width: 500px;
+     height: 309px;
+  }
+}
+
+  

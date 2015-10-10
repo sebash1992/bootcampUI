@@ -1,6 +1,9 @@
 <div class="container" >
 	<div class="tttwitDetail" >
+
+
 			<div class="twitHeader">
+				<div class="isRetweeted" compile="twit.rt"></div>
 				<a>
 					<img class="profilePicture col-1" src="{{ twit.user.profile_image_url}}">
 					<div class="user">
@@ -21,12 +24,10 @@
 				</a>
 			</div>
 			<div class="whiteDiv">
-			</div>
-			<div class="textSize">
-				
-				
-				 <div compile="twit.text"></div>
-			</div>
+			</div>				
+				 <p class="textSize"compile="twit.text"></p>	
+				 <div compile="twit.photo"></div>
+
 			<div>
 				<b class="time">{{twit.created_at | date:"h:mma '-' d MMM yy"}}<b>
 			</div>

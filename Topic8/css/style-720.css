@@ -1,0 +1,91 @@
+@media (min-width: 720px) and  (max-width: 1023px){
+  body {
+     font: 13px "Lucida Grande", Helvetica, Arial, sans-serif;
+     }
+
+  header h1{
+      font-size: 23px;
+  }
+
+  header .header-text{
+      font-size: 15px;
+  }
+
+
+  header i.fa-twitter{
+      color: #21759b;
+      margin-right: 7px;
+  }
+
+  .twitHeader .profilePicture {
+      width: 70px;
+      height: 70px;
+  }
+ 
+  .userName {
+      font-size: 12px;
+  }
+
+  .blockedUser b{  
+      font-size: 15px;
+  }
+
+  .inputBlockUser{
+    font-size: 18px;
+  }
+
+  
+  .twitContent .profilePicture{
+    width: 50px;
+    height: 50px;
+  }
+
+  .twitDetail .profilePicture{
+    width: 60px;
+    height: 60px;
+  }
+
+  .twitDetail .textSize a{
+      font-size: 16px;
+  }
+
+  .twitDetail .word{
+    font-size: 12px;
+  }
+
+  .tttwitDetail .textSize a{
+      font-size: 16px;
+  }
+
+  .tttwitDetail .word{
+    font-size: 11px;
+  }
+
+  .tttwitDetail .time{ 
+    font-size: 11px;
+  }
+
+  .twitDetail .time{ 
+    font-size: 12px;
+  }
+
+ 
+  .mimenu{
+   font-size: 20px;
+  }
+  .twitContent .twitPhoto{
+    width: 600px;
+    height: 342px;
+  }
+  .tttwitDetail .twitPhoto{
+    width: 800px;
+    height: 456px;
+  }
+   .twitDetail .twitPhoto{
+    width: 800px;
+    height: 456px;
+  }
+}
+
+
+ 
