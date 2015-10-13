@@ -33,8 +33,9 @@ finalApp.factory('DiffBetweenTimes', function () {
     
     return {
         getDiffBetweenTimes: function(start) {
-        	
+
             var date = new Date(start), dateNow = new Date();
+            console.log(date);
 			var diferencia = dateNow.getTime() - date.getTime();
 		   	var dias = Math.floor(diferencia / (1000 * 60 * 60 * 24)), 
 		   	hrs = Math.floor(diferencia / (1000 * 60 * 60)), 

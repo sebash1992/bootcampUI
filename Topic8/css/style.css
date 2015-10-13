@@ -70,13 +70,13 @@ body {
   .container{
       padding-top: 20px;
       margin: auto;
-      max-width: 80%;
+      max-width: 98%;
   }
 
   header{
 
-      max-width: 80%;
       margin: auto;
+      max-width: 98%;
   }
 
   .menu{
@@ -333,20 +333,9 @@ body {
     padding-bottom:  : 20px;
   }
   .mimenu{
-   color:white;
    padding-bottom: 50px;
   }
-  .active{
-    background: #003580;
-  }
-
-  nav a .active{
-    color: #fff;
-  }
-
-  nav a .active i{
-    color: #fff;
-  }
+  
 
   .twitContent .isRetweeted .fa{
      color:#266A2E;
@@ -370,5 +359,32 @@ body {
   .twitDetail .isRetweeted .fa{
       color:#266A2E;
   }
+  .mimenu.fa{
+    color:#585858;
+  }
 
-  
+.mimenu a{
+  color:#585858;
+}
+
+nav a.active span{
+  color: #55acee;
+}
+
+nav a.active i{
+  color: #fff;
+}
+nav a:hover span{
+  text-decoration: underline
+}
+
+a:hover {
+  text-decoration: underline
+}
+ .twitDetail .twitPhoto{
+      padding-left: 30px;
+  }
+
+.tttwitDetail .twitPhoto{
+    padding-left: 30px;
+}

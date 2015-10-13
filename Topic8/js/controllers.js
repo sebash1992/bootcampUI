@@ -36,8 +36,7 @@ finalApp.controller('TimelineCtrl', function($scope, $http,$location,UserBlocked
 						if($scope.twitsWithBlocs[i].retweeted_status !=undefined){
 		    				var twitText = $scope.twitsWithBlocs[i].retweeted_status.text;
 		    				var retweetedBy= '<i class="fa fa-retweet"></i>' + '   '+$scope.twitsWithBlocs[i].user.name +' retweeted';
-		    				var twittedBy= $scope.twitsWithBlocs[i].retweeted_status.user ;
-		    				var tiempo = DiffBetweenTimes.getDiffBetweenTimes($scope.twitsWithBlocs[i].retweeted_status.created_at), date = new Date($scope.twitsWithBlocs[i].retweeted_status.created_at);						
+		    				var twittedBy= $scope.twitsWithBlocs[i].retweeted_status.user ;					
 		    				var retweets = $scope.twitsWithBlocs[i].retweeted_status.retweet_count;
 		    				var favourites = $scope.twitsWithBlocs[i].retweeted_status.favorite_count;
 
@@ -47,8 +46,16 @@ finalApp.controller('TimelineCtrl', function($scope, $http,$location,UserBlocked
 			    			}else{
 			    				var media = "";
 			    			}
+
+			    				if(navigator.userAgent.search("MSIE") !=-1 || navigator.appVersion.search("Trident")!=-1 ){	  
+			    					var timeToConvert =  $scope.twitsWithBlocs[i].retweeted_status.created_at; 					
+							    	var timeconverted = timeToConvert.replace("+0000", "GMT+0000");		
+							    	var tiempo = DiffBetweenTimes.getDiffBetweenTimes(timeconverted), date = new Date(timeconverted);							
+								}else{
+								 	var tiempo = DiffBetweenTimes.getDiffBetweenTimes($scope.twitsWithBlocs[i].retweeted_status.created_at), date = new Date($scope.twitsWithBlocs[i].retweeted_status.created_at);	
+								
+								}
 		    			}else{
-		    				var tiempo = DiffBetweenTimes.getDiffBetweenTimes($scope.twitsWithBlocs[i].created_at), date = new Date($scope.twitsWithBlocs[i].created_at);						
 		    				var twitText = $scope.twitsWithBlocs[i].text;
 		    				var retweetedBy="";
 		    				var twittedBy= $scope.twitsWithBlocs[i].user;
@@ -61,6 +68,15 @@ finalApp.controller('TimelineCtrl', function($scope, $http,$location,UserBlocked
 			    			}else{
 			    				var media = "";
 			    			}
+			    			if(navigator.userAgent.search("MSIE") !=-1 || navigator.appVersion.search("Trident")!=-1 ){	  
+			    					var timeToConvert =  $scope.twitsWithBlocs[i].created_at;			
+							    	var timeconverted = timeToConvert.replace("+0000", "GMT+0000");		
+							    	var tiempo = DiffBetweenTimes.getDiffBetweenTimes(timeconverted), date = new Date(timeconverted);							
+								}else{
+								 	var tiempo = DiffBetweenTimes.getDiffBetweenTimes($scope.twitsWithBlocs[i].created_at), date = new Date($scope.twitsWithBlocs[i].created_at);						
+		    					
+								
+								}
 		    			}
 		    			
 
